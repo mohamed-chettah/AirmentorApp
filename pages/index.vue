@@ -11,7 +11,7 @@
         <UBadge class="title dark:bg-gold-200/50 bg-gold-200/50 xl:text-sm text-[10px] text-white dark:text-white rounded-xl" size="lg" variant="solid">Design - Développement Web - SEO </UBadge>
       </div>
 
-      <div class="xl:text-left text-center flex  xl:flex-row flex-col justify-center gap-40">
+      <div class="xl:text-left text-center flex  xl:flex-row flex-col justify-center xl:gap-40 gap-20">
         <div>
           <h1 class="text-4xl font-bold text-primary leading-relaxed">
             Des mentors experts pour <br> résoudre tous vos problèmes.
@@ -25,10 +25,8 @@
         </div>
 
 
-        <NuxtImg src="/img/main-picture.png" class="rounded-2xl" />
+        <NuxtImg src="/img/main-picture.png" class="xl:w-1/3 xl:mx-0 mx-auto rounded-2xl" />
       </div>
-
-
 
     </div>
 
