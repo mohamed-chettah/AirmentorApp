@@ -4,7 +4,7 @@ import Navbar from "~/component/navbar.vue";
 
 <template>
 
-  <Navbar class="pt-20"/>
+<!--  <Navbar class="pt-20"/>-->
 
   <div class="mt-14 ">
     <slot />
