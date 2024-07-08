@@ -22,11 +22,5 @@ export default <Partial<Config>>{
         fontFamily: {
             'body': ['Open Sans']
         },
-        screens : {
-            '2xl' : '1550px'
-        }
-    },
-    container: {
-        center: true,
     }
 }

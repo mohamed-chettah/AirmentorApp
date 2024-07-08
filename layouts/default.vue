@@ -7,7 +7,7 @@ import Header from "~/components/header.vue";
 
   <Header class="pt-5"/>
 
-  <div class="mt-20">
+  <div class="mt-32 container mx-auto">
     <slot />
   </div>
 
