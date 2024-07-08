@@ -1,11 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2024-07-08",
+  pages: true,
   devtools: { enabled: true },
-  modules: ["@nuxt/ui", "@nuxt/image"],
+  css: ['~/assets/css/main.css'],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+  modules: [
+    '@nuxt/image',
+    "@nuxt/ui"
+  ],
   ui: {
     global: true,
     icons: ['heroicons','mdi'],
-  },
-  css: ['~/assets/css/main.css']
+  }
 })

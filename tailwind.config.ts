@@ -16,7 +16,14 @@ export default <Partial<Config>>{
                     '900': '#264a82',
                     '950': '#1c2f4f',
                 },
+                "primary-100": "#2957a4",
             }
+        },
+        fontFamily: {
+            'body': ['Open Sans']
+        },
+        screens : {
+            '2xl' : '1550px'
         }
     },
     container: {
