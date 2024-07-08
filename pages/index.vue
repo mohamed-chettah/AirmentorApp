@@ -11,8 +11,18 @@
         <UBadge class="title dark:bg-gold-200/50 bg-gold-200/50 xl:text-sm text-[10px] text-white dark:text-white rounded-xl" size="lg" variant="solid">Design - Développement Web - SEO </UBadge>
       </div>
 
-      <h1 class="text-center xl:text-8xl md:text-7xl
-      sm:text-5xl text-4xl font-bold text-primary leading-relaxed">La solution rapide à tous vos défis techniques.</h1>
+      <div>
+        <h1 class="text-center xl:text-8xl md:text-7xl
+      sm:text-5xl text-4xl font-bold text-primary leading-relaxed">
+          Des mentors experts pour résoudre tous vos problèmes.
+        </h1>
+
+
+        <NuxtImg src="/img/main-picture.png" class="w-96 mx-auto" />
+      </div>
+
+
+
     </div>
 
   </div>

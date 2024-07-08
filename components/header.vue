@@ -9,16 +9,22 @@
           <a href="/" class="cursor-pointer text-xl font-bold text-primary" >
             AirMentor
           </a>
-          <UInput
-              icon="i-heroicons-magnifying-glass-20-solid"
-              size="md"
-              color="white"
-              :trailing="false"
-              placeholder="Recherche de mentor..."
-          />
+
+          <div class="flex gap-5">
+            <UInput
+                size="md"
+                color="white"
+                :trailing="false"
+                placeholder="Que souhaitez vous apprendre ?"
+                class="rounded-xl w-60"
+            />
+
+            <UButton   class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>
+          </div>
+
         </div>
 
-        <UButton color="primary" variant="solid">Connexion</UButton>
+        <UButton color="primary" class="rounded-xl" variant="solid">Connexion</UButton>
 
 
       </div>
