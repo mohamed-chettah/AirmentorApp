@@ -1,6 +1,6 @@
 export async function fetchWithoutBody(url: string, method: any, signal : any = null) {
 
-    return await $fetch("localhost:3001/api" + url, {
+    return await $fetch("localhost:3001/api/" + url, {
             method: method,  // Méthode HTTP à utiliser pour la requête
             credentials: 'include',
             // On passe le cookie pour vérifier si l'utilisateur est connecté coté middleware laravel
@@ -14,7 +14,7 @@ export async function fetchWithoutBody(url: string, method: any, signal : any = 
 
 export async function fetchWithBody(url: string, method: any, body : any = null, signal : any = null) {
 
-    const { data, pending, error, refresh } = await useAsyncData ('',
+    const { data, error, refresh } = await useAsyncData ('',
         () => $fetch("/localhost:3001/api/" + url, {
             method: method,
             credentials: 'include',
