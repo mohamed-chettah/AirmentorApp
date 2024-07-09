@@ -16,5 +16,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: antiquewhite;
+}
+
+h1 {
+    font-family: 'Poppins Bold', sans-serif;
 }
