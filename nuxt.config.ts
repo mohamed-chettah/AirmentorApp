@@ -10,12 +10,11 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-
   modules: [
     '@nuxt/image',
-    "@nuxt/ui"
+    "@nuxt/ui",
+    "@pinia/nuxt"
   ],
-
   ui: {
     global: true,
     icons: ['heroicons','mdi'],
