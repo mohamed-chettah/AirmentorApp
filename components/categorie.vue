@@ -1,5 +1,11 @@
 <script setup lang="ts">
 
+import {useCategorieStore} from "~/stores/CategorieStore";
+
+useCategorieStore().getAllCategorie().then(() => {
+  console.log('Categories loaded')
+})
+
 </script>
 
 <template>

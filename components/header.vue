@@ -50,7 +50,7 @@ async function logout() {
         </div>
         <div class="flex lg:hidden">
           <DisclosureButton
-              class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+              class="relative inline-flex items-center bg-primary text-white justify-center rounded-md p-2 hover:bg-primary/80 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
             <UIcon v-if="!open" class="xl:hidden h-6 w-6 flex" name="i-heroicons-bars-2-solid"/>
             <UIcon v-else class=" h-6 w-6  " name="i-mdi-close"/>
           </DisclosureButton>
