@@ -4,7 +4,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 </script>
 
 <template>
-  <Disclosure as="nav" class="fixed bg-white top-0 left-0 right-0 z-50" v-slot="{ open }">
+  <Disclosure as="nav" class="bg-white z-50" v-slot="{ open }">
     <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="flex items-center px-2 lg:px-0">
@@ -15,7 +15,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
           </div>
           <div class="hidden lg:ml-6 lg:block">
             <div class="flex space-x-4">
-              <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Annonces</a></div>
+              <a href="#" class="rounded-md bg-primary hover:opacity-65 px-3 py-2 text-sm font-medium text-white">Annonces</a></div>
           </div>
         </div>
         <div class="flex flex-1 justify-center px-2 gap-3 lg:ml-6 lg:justify-end">
@@ -25,18 +25,15 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
                   color="white"
                   :trailing="false"
                   placeholder="Que souhaitez vous apprendre ?"
-                  class="rounded-xl xl:flex hidden xl:w-60"
+                  class="rounded-xl xl:w-60 w-40"
               />
 
               <UButton   class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>
         </div>
         <div class="flex lg:hidden">
           <DisclosureButton class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-            <span class="absolute -inset-0.5" />
-            <span class="sr-only">Open main menu</span>
-            <UButton v-if="!open" class="xl:hidden h-6 w-6 flex" icon="i-heroicons-bars-2-solid"  />
-            <UButton v-else class=" h-6 w-6  " icon="i-heroicons-bars-2-solid"  />
-            <UButton icon="i-mdi-close" v-else />
+            <UIcon v-if="!open" class="xl:hidden h-6 w-6 flex" name="i-heroicons-bars-2-solid" />
+            <UIcon v-else class=" h-6 w-6  " name="i-mdi-close"  />
           </DisclosureButton>
         </div>
         <div class="hidden lg:ml-4 lg:block">
@@ -72,7 +69,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
     <DisclosurePanel class="lg:hidden">
       <div class="space-y-1 px-2 pb-3 pt-2">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <DisclosureButton as="a" href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white">Annonces</DisclosureButton>
+        <DisclosureButton as="a" href="#" class="block rounded-md bg-primary hover:opacity-65 px-3 py-2 text-base font-medium text-white">Annonces</DisclosureButton>
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
         <div class="flex items-center px-5">
