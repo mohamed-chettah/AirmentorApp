@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', () => {
     async function updateReservation(reservationId: number, reservation: UserType){
         try {
             loading.value = true;
-            await $fetch('http://127.0.0.1:8000/api/reservations/' + reservationId, {
+            await $fetch('http://127.0.0.1:3/api/reservations/' + reservationId, {
                 headers: {
                     'Content-Type': 'application/merge-patch+json', // Corrected Content-Type
                     'Accept': 'application/ld+json'
