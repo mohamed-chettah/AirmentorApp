@@ -3,14 +3,14 @@
 </script>
 
 <template>
-    <nav  class="fixed bg-white top-0 left-0 right-0 z-5">
+    <nav  class="fixed bg-white top-0 left-0 right-0 z-50">
       <div class="flex xl:mx-10 mx-3 justify-between items-center h-24 ">
-        <div class="flex flex-row items-center xl:gap-20 gap-16">
+        <div class="flex flex-row justify-between items-center xl:gap-20 gap-16">
           <a href="/" class="cursor-pointer text-xl font-bold text-primary" >
             AirMentor
           </a>
 
-          <div class="flex gap-2 ">
+          <div class="xl:flex hidden gap-2 ">
 
             <UInput
                 size="md"
@@ -18,14 +18,6 @@
                 :trailing="false"
                 placeholder="Que souhaitez vous apprendre ?"
                 class="rounded-xl xl:flex hidden xl:w-60"
-            />
-
-            <UInput
-                size="md"
-                color="white"
-                :trailing="false"
-                placeholder="Recherche"
-                class="rounded-xl xl:hidden flex xl:w-60 w-32"
             />
 
             <UButton   class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>

@@ -50,7 +50,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-    <section class="grid grid-cols-1 gap-4 md:grid-cols-3 ">
+    <section class="grid grid-cols-1 gap-4 md:grid-cols-3 container mx-auto">
       <!--      Colonne 1 -->
       <div class="flex flex-col w-full gap-4">
         <!--    Photo de profile -->
@@ -77,29 +77,29 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       </div>
       <!--      Colonne 2 -->
 
-      <div class="flex flex-col w-full gap-4">
+      <div class="flex flex-col gap-4">
         <!--        Information Générale 🤷‍  Forrmualaire️-->
 
-        <UCard class="w-full flex flex-col items-center">
+        <UCard class="flex flex-col ">
           <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
-          <UForm :schema="schema" :state="state" class="space-y-4 w-96 " @submit="onSubmit">
+          <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
             <UFormGroup label="Name" name="name">
-              <UInput v-model="state.first_name" size="xl"/>
+              <UInput v-model="state.first_name" />
             </UFormGroup>
             <UFormGroup label="Last Name" name="last_name">
-              <UInput v-model="state.last_name" size="xl"/>
+              <UInput v-model="state.last_name"/>
             </UFormGroup>
             <UFormGroup label="Age" name="age">
-              <UInput type="number" v-model="state.age" size="xl"/>
+              <UInput type="number" v-model="state.age"/>
             </UFormGroup>
             <UFormGroup label="Phone" name="phone">
-              <UInput v-model="state.phone" size="xl"/>
+              <UInput v-model="state.phone" />
             </UFormGroup>
             <UFormGroup label="Loation" name="location">
-              <UInput v-model="state.location" size="xl"/>
+              <UInput v-model="state.location" size="xl" />
             </UFormGroup>
             <UFormGroup label="Description" name="description">
-              <UTextarea v-model="state.description" resize size="xl"/>
+              <UTextarea v-model="state.description" resize />
             </UFormGroup>
 
             <UButton type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
