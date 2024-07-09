@@ -17,6 +17,7 @@
     "nuxt": "^3.12.3",
     "pinia": "^2.1.7",
     "vue": "latest",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@nuxtjs/color-mode": "^3.3.2"
   }
 }
