@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <nav  class="fixed top-0 left-0 right-0 z-5">
+    <nav  class="fixed bg-white top-0 left-0 right-0 z-5">
       <div class="flex xl:mx-10 mx-3 justify-between items-center h-24 ">
         <div class="flex flex-row items-center xl:gap-20 gap-16">
           <a href="/" class="cursor-pointer text-xl font-bold text-primary" >
@@ -36,7 +36,7 @@
         </div>
 
         <div class="gap-4 xl:flex hidden">
-          <ButtonBasic label=" Proposer ses services de mentorat" />
+          <ButtonBasic label="Donner des cours" />
           <ButtonBasic label="Connexion" />
         </div>
       </div>

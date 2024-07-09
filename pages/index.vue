@@ -17,7 +17,7 @@
             Des mentors experts pour <br> résoudre tous vos problèmes.
           </h1>
 
-          <div class="flex flex-col gap-10 mt-16">
+          <div class="flex flex-col font-bold gap-4 mt-10">
           <p class="text-xl">🔥 Des mentors partout en France </p>
           <p  class="text-xl">🎓 Pour toutes les matières de la tech </p>
           <p  class="text-xl"> 💪 Pour tous les niveaux et budgets </p>
@@ -25,7 +25,7 @@
         </div>
 
 
-        <NuxtImg src="/img/main-picture.png" class="xl:w-1/3 xl:mx-0 mx-auto rounded-2xl" />
+        <NuxtImg src="/img/main-picture.png" class="xl:w-full xl:mx-0 mx-auto rounded-2xl" />
       </div>
 
     </div>
