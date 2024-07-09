@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '~/stores/UserStore';
 
@@ -23,31 +23,36 @@ async function logout() {
       <div class="relative flex h-16 items-center justify-between">
         <div class="flex items-center px-2 lg:px-0">
           <div class="flex-shrink-0">
-            <a href="/" class="cursor-pointer text-xl font-bold text-primary" >
+            <NuxtLink to="/" class="cursor-pointer text-2xl font-bold text-primary">
               AirMentor
-            </a>
+            </NuxtLink>
           </div>
           <div class="hidden lg:ml-6 lg:block">
             <div class="flex space-x-4">
-              <a href="#" class="rounded-md bg-primary hover:opacity-65 px-3 py-2 text-sm font-medium text-white">Annonces</a></div>
+              <NuxtLink to="/annonces"
+                        active-class="font-bold text-primary underline"
+                        class="rounded-md border-primary hover:opacity-65 px-3 pt-1 text-lg font-medium">Annonces
+              </NuxtLink>
+            </div>
           </div>
         </div>
         <div class="flex flex-1 justify-center px-2 gap-3 lg:ml-6 lg:justify-end">
 
-              <UInput
-                  size="md"
-                  color="white"
-                  :trailing="false"
-                  placeholder="Que souhaitez vous apprendre ?"
-                  class="rounded-xl xl:w-60 w-40"
-              />
+          <UInput
+              size="md"
+              color="white"
+              :trailing="false"
+              placeholder="Que souhaitez vous apprendre ?"
+              class="rounded-xl xl:w-60 w-40"
+          />
 
-              <UButton   class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>
+          <UButton class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>
         </div>
         <div class="flex lg:hidden">
-          <DisclosureButton class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-            <UIcon v-if="!open" class="xl:hidden h-6 w-6 flex" name="i-heroicons-bars-2-solid" />
-            <UIcon v-else class=" h-6 w-6  " name="i-mdi-close"  />
+          <DisclosureButton
+              class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+            <UIcon v-if="!open" class="xl:hidden h-6 w-6 flex" name="i-heroicons-bars-2-solid"/>
+            <UIcon v-else class=" h-6 w-6  " name="i-mdi-close"/>
           </DisclosureButton>
         </div>
         <div class="hidden lg:ml-4 lg:block">
@@ -69,13 +74,15 @@ async function logout() {
               <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                 <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <MenuItem v-slot="{ active }">
-                    <a href="/mon-compte" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your Profile</a>
+                    <NuxtLink to="/mon-compte" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Mon compte</NuxtLink>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
+                    <a href="#"
+                       :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
+                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign
+                      out</a>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -88,27 +95,42 @@ async function logout() {
     <DisclosurePanel class="lg:hidden">
       <div class="space-y-1 px-2 pb-3 pt-2">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <DisclosureButton as="a" href="#" class="block rounded-md bg-primary hover:opacity-65 px-3 py-2 text-base font-medium text-white">Annonces</DisclosureButton>
+        <DisclosureButton as="a" href="#"
+                          class="block rounded-md bg-primary hover:opacity-65 px-3 py-2 text-base font-medium text-white">
+          Annonces
+        </DisclosureButton>
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
         <div class="flex items-center px-5">
           <div class="flex-shrink-0">
-            <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+            <img class="h-10 w-10 rounded-full"
+                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                 alt=""/>
           </div>
           <div class="ml-3">
             <div class="text-base font-medium text-white">Tom Cook</div>
             <div class="text-sm font-medium text-gray-400">tom@example.com</div>
           </div>
-          <button type="button" class="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-            <span class="absolute -inset-1.5" />
+          <button type="button"
+                  class="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+            <span class="absolute -inset-1.5"/>
             <span class="sr-only">View notifications</span>
-            <BellIcon class="h-6 w-6" aria-hidden="true" />
+            <BellIcon class="h-6 w-6" aria-hidden="true"/>
           </button>
         </div>
         <div class="mt-3 space-y-1 px-2">
-          <DisclosureButton as="a" href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your Profile</DisclosureButton>
-          <DisclosureButton as="a" href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Settings</DisclosureButton>
-          <DisclosureButton as="a" href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign out</DisclosureButton>
+          <DisclosureButton as="a" href="#"
+                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+            Your Profile
+          </DisclosureButton>
+          <DisclosureButton as="a" href="#"
+                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+            Settings
+          </DisclosureButton>
+          <DisclosureButton as="a" href="#"
+                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+            Sign out
+          </DisclosureButton>
         </div>
       </div>
     </DisclosurePanel>
