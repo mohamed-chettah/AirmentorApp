@@ -7,7 +7,7 @@ const userStore = useUserStore();
 const { user, isAuthenticated } = storeToRefs(userStore);
 
 async function authenticate() {
-  window.location.href = 'http://localhost:3001/api/auth/google';
+  window.location.href = 'http://localhost:3001/auth/google';
 }
 
 async function logout() {
