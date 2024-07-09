@@ -35,7 +35,7 @@ const skills = [
   <!--  des filtres par note / par categorie / par skills-->
   <!--  une liste d'annonces (grid 3 col) sous forme de carde avec une image, un titre, une description, une note, un nombre de credit et un bouton pour voir plus de detail-->
 
-  <div class=" flex flex-col gap-6">
+  <div class=" flex flex-col gap-6 container mx-auto">
     <h1 class="text-4xl font-bold text-primary">Annonces</h1>
     <div class="flex gap-4">
       <USelect class="w-48" label="Note" :options="notes"/>
@@ -43,9 +43,9 @@ const skills = [
       <USelect class="w-48" label="Skills" :options="skills"/>
     </div>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <NuxtLink to="/annonces/1">
+      <NuxtLink to="/annonces/1" class="p-0">
         <UCard>
-          <div class="flex flex-col gap-4 p-4 rounded-lg shadow-md bg-white">
+          <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
             <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
             <p class="text-sm text-gray-600">Description de l'annonce</p>
@@ -65,7 +65,7 @@ const skills = [
       </NuxtLink>
       <NuxtLink to="/annonces/1">
         <UCard>
-          <div class="flex flex-col gap-4 p-4 rounded-lg shadow-md bg-white">
+          <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
             <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
             <p class="text-sm text-gray-600">Description de l'annonce</p>
@@ -85,7 +85,7 @@ const skills = [
       </NuxtLink>
       <NuxtLink to="/annonces/1">
         <UCard>
-          <div class="flex flex-col gap-4 p-4 rounded-lg shadow-md bg-white">
+          <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
             <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
             <p class="text-sm text-gray-600">Description de l'annonce</p>
@@ -106,7 +106,7 @@ const skills = [
 
       <NuxtLink to="/annonces/1">
         <UCard>
-          <div class="flex flex-col gap-4 p-4 rounded-lg shadow-md bg-white">
+          <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
             <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
             <p class="text-sm text-gray-600">Description de l'annonce</p>
@@ -126,7 +126,7 @@ const skills = [
       </NuxtLink>
       <NuxtLink to="/annonces/1">
         <UCard>
-          <div class="flex flex-col gap-4 p-4 rounded-lg shadow-md bg-white">
+          <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
             <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
             <p class="text-sm text-gray-600">Description de l'annonce</p>
@@ -146,7 +146,7 @@ const skills = [
       </NuxtLink>
       <NuxtLink to="/annonces/1">
         <UCard>
-          <div class="flex flex-col gap-4 p-4 rounded-lg shadow-md bg-white">
+          <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
             <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
             <p class="text-sm text-gray-600">Description de l'annonce</p>
@@ -166,6 +166,4 @@ const skills = [
       </NuxtLink>
     </div>
   </div>
-
-
 </template>

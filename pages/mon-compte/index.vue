@@ -29,7 +29,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-    <section class="grid grid-cols-1 gap-4 md:grid-cols-3 ">
+    <section class="grid grid-cols-1 gap-4 md:grid-cols-3 container mx-auto">
       <!--      Colonne 1 -->
       <div class="flex flex-col w-full gap-4">
         <!--    Photo de profile -->
