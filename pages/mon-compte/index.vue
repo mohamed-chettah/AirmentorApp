@@ -1,6 +1,11 @@
-<script setup lang="ts" xmlns="http://www.w3.org/1999/html">
-import {z} from 'zod'
-import type {FormSubmitEvent} from '#ui/types'
+<script setup lang="ts">
+import { ref, reactive, onMounted } from 'vue';
+import { z } from 'zod';
+import type { FormSubmitEvent } from '#ui/types';
+import { fetchWithoutBody, fetchWithBody } from '~/utils/utils.ts'; // Mettez à jour le chemin vers vos fonctions
+
+const loading = ref(false);
+const message = ref('');
 
 const schema = z.object({
   last_name: z.string().min(2, 'Must be at least 2 characters'),
@@ -8,45 +13,59 @@ const schema = z.object({
   age: z.number().int().min(12, 'Must be at least 12 years old'),
   phone: z.string().min(10, 'Must be at least 10 characters'),
   location: z.string().min(2, 'Must be at least 2 characters'),
-  description: z.string().min(10, 'Must be at least 10 characters').max(350, 'Must be at most 350 characters')
-})
+  description: z.string().min(10, 'Must be at least 10 characters').max(350, 'Must be at most 350 characters'),
+});
 
-type Schema = z.output<typeof schema>
-const userStore = useUserStore()
-const userStorage = userStore;
-const { myProfile } = userStore
+type Schema = z.output<typeof schema>;
 
-const state = reactive({
+const state = reactive<Schema>({
   last_name: '',
   first_name: '',
   age: 0,
   phone: '',
   location: '',
   description: ''
-})
+});
 
+const userId = ref(''); // Assurez-vous que l'ID est disponible
+
+async function fetchUserData() {
+  try {
+    loading.value = true;
+    const user = await fetchWithoutBody('users/' + "668cf096042d278f06ea5214", 'GET');
+    console.log("USER:"+ user.name); 
+    if (user) {
+      // Update all properties of state with the fetched data
+      state.last_name = user.name
+      console.log('User data updated successfully');
+    }
+  } catch (e) {
+    console.log('Failed to fetch user data', e);
+  } finally {
+    loading.value = false;
+  }
+}
 
 onMounted(async () => {
-  // Assuming you have a way to get the user ID, replace 1 with the actual user ID
-  const userData = await myProfile(1)
-  if (userData) {
-    // Update the state with the fetched user data
-    Object.assign(state, {
-      last_name: userData.last_name || '',
-      first_name: userData.first_name || '',
-      age: userData.age || 0,
-      phone: userData.phone || '',
-      location: userData.location || '',
-      description: userData.description || ''
-    })
+  const userStorage = localStorage.getItem('user');
+  if (userStorage) {
+    const user = JSON.parse(userStorage);
+    userId.value = user.id; // Make sure the ID is included in the storage
+    await fetchUserData();
+    console.log(state); // This will now log the updated state with real data
   }
-})
+});
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Handle form submission
-  console.log(event.data)
-  // You might want to add logic here to update the user profile
+  try {
+    const parsedData = schema.parse(state);
+    const response = await fetchWithBody('users/' + "668cf096042d278f06ea5214", 'GET', parsedData);
+    console.log('Success:', response);
+  } catch (e) {
+    console.error('Failed to update user data', e);
+  }
 }
+fetchUserData()
 </script>
 
 <template>
@@ -82,25 +101,25 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
         <UCard class="flex flex-col ">
           <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
-          <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
-            <UFormGroup label="Name" name="name">
-              <UInput v-model="state.first_name" />
-            </UFormGroup>
-            <UFormGroup label="Last Name" name="last_name">
-              <UInput v-model="state.last_name"/>
-            </UFormGroup>
-            <UFormGroup label="Age" name="age">
-              <UInput type="number" v-model="state.age"/>
-            </UFormGroup>
-            <UFormGroup label="Phone" name="phone">
-              <UInput v-model="state.phone" />
-            </UFormGroup>
-            <UFormGroup label="Loation" name="location">
-              <UInput v-model="state.location" size="xl" />
-            </UFormGroup>
-            <UFormGroup label="Description" name="description">
-              <UTextarea v-model="state.description" resize />
-            </UFormGroup>
+            <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
+    <UFormGroup label="Name" name="name">
+      <UInput v-model="state.first_name" />
+    </UFormGroup>
+    <UFormGroup label="Last Name" name="last_name">
+      <UInput v-model="state.last_name"/>
+    </UFormGroup>
+    <UFormGroup label="Age" name="age">
+      <UInput type="number" v-model="state.age"/>
+    </UFormGroup>
+    <UFormGroup label="Phone" name="phone">
+      <UInput v-model="state.phone" />
+    </UFormGroup>
+    <UFormGroup label="Location" name="location">
+      <UInput v-model="state.location" size="xl" />
+    </UFormGroup>
+    <UFormGroup label="Description" name="description">
+      <UTextarea v-model="state.description" resize />
+    </UFormGroup>
 
             <UButton type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
 
