@@ -28,7 +28,6 @@ export async function fetchWithBody(url: string, method: any, body : any = null,
 
         })
     );
-console.log(data);
 
     return data;
 }
