@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue';
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '~/stores/UserStore';
 
@@ -59,8 +59,8 @@ async function logout() {
           <div class="flex items-center">
             <!-- Profile dropdown -->
         <div class="flex flex-row" v-if="!isAuthenticated">
-          <img class="h-6" src="../public/img/google.png" alt="Google logo" />
-          <UButton @click="authenticate" class="bg-gray-100 text-primary rounded-xl hover:text-white xl:text-sm text-xs" variant="solid">Se connecter</UButton>
+
+          <UButton @click="authenticate" class="bg-gray-100 text-primary rounded-xl hover:text-white xl:text-sm text-xs  border-[1px] border-primary" variant="solid">  <img class="h-6" src="../public/img/google.png" alt="Google logo" /> Se connecter</UButton>
         </div>
 
             <Menu as="div" class="relative ml-4 flex-shrink-0" v-else>
@@ -101,6 +101,14 @@ async function logout() {
         </DisclosureButton>
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
+
+        <div class="flex justify-center flex-row" v-if="!isAuthenticated">
+
+          <UButton @click="authenticate" class="bg-gray-100 text-primary rounded-xl hover:text-white xl:text-sm text-xs  border-[1px] border-primary" variant="solid">  <img class="h-6" src="../public/img/google.png" alt="Google logo" /> Se connecter</UButton>
+        </div>
+
+        <div v-else >
+
         <div class="flex items-center px-5">
           <div class="flex-shrink-0">
             <img class="h-10 w-10 rounded-full"
@@ -118,19 +126,20 @@ async function logout() {
             <BellIcon class="h-6 w-6" aria-hidden="true"/>
           </button>
         </div>
-        <div class="mt-3 space-y-1 px-2">
-          <DisclosureButton as="a" href="#"
+          <div class="mt-3 space-y-1 px-2">
+            <DisclosureButton as="a" href="#"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
             Your Profile
           </DisclosureButton>
-          <DisclosureButton as="a" href="#"
+            <DisclosureButton as="a" href="#"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
             Settings
           </DisclosureButton>
-          <DisclosureButton as="a" href="#"
+            <DisclosureButton as="a" href="#"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
             Sign out
           </DisclosureButton>
+          </div>
         </div>
       </div>
     </DisclosurePanel>
