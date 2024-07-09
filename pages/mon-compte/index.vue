@@ -12,19 +12,40 @@ const schema = z.object({
 })
 
 type Schema = z.output<typeof schema>
+const userStore = useUserStore()
+const userStorage = userStore;
+const { myProfile } = userStore
 
 const state = reactive({
-  last_name: 'Toto',
-  first_name: 'Tata',
-  age: 20,
-  phone: '07 12 34 56 78',
-  location: '9 rue de la paix, 75000 Paris',
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+  last_name: '',
+  first_name: '',
+  age: 0,
+  phone: '',
+  location: '',
+  description: ''
+})
+
+
+onMounted(async () => {
+  // Assuming you have a way to get the user ID, replace 1 with the actual user ID
+  const userData = await myProfile(1)
+  if (userData) {
+    // Update the state with the fetched user data
+    Object.assign(state, {
+      last_name: userData.last_name || '',
+      first_name: userData.first_name || '',
+      age: userData.age || 0,
+      phone: userData.phone || '',
+      location: userData.location || '',
+      description: userData.description || ''
+    })
+  }
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Do something with data
+  // Handle form submission
   console.log(event.data)
+  // You might want to add logic here to update the user profile
 }
 </script>
 
