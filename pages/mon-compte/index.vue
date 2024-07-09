@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
-import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
-import { fetchWithoutBody, fetchWithBody } from '~/utils/utils.ts'; // Mettez à jour le chemin vers vos fonctions
-import { useUserStore } from "~/stores/UserStore.ts"
+import { onMounted, reactive, ref } from 'vue';
+import { z } from 'zod';
+import { useUserStore } from "~/stores/UserStore.ts";
+import { fetchWithBody } from '~/utils/utils.ts'; // Mettez à jour le chemin vers vos fonctions
 
 const loading = ref(false);
 const message = ref('');
@@ -38,7 +38,12 @@ async function fetchUserData() {
   console.log(user.value)
   try {
     loading.value = true;
-    const user = await fetchWithoutBody('users/' + userStore.user.googleId, 'GET');
+      const response = await fetch('http://localhost:3001/api/users/' + userStore.user.googleId, {
+        method: "GET",
+        credentials: "include", // This is important to include cookies
+      });
+    // const user = await fetch('http://localhost:3001/users/' + userStore.user.googleId)
+    // fetchWithoutBody('users/' + userStore.user.googleId, 'GET');
     if (user) {
       // Update all properties of state with the fetched data
       state.first_name = user.name

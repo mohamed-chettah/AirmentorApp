@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {fetchWithoutBody} from "~/utils/utils";
 import type { AnnouncementType } from "~/types/AnnouncementType";
 
 const notes = [
@@ -37,8 +36,14 @@ const AnnoncesList = ref<AnnouncementType[]>([])
 // return c.json(announcement)
 // })
 const fetchAnnonces = async () => {
-  const res = await fetchWithoutBody('announcements', 'GET')
-  AnnoncesList.value = await res
+      const response = await fetch('http://localhost:3001/api/announcements', {
+        method: "GET",
+        credentials: "include", // This is important to include cookies
+      });
+      const parsed = await response.json()
+      
+  // const res = await fetchWithoutBody('announcements', 'GET')
+  AnnoncesList.value = await parsed
 }
 
 fetchAnnonces()
