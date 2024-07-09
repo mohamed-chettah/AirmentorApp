@@ -22,7 +22,7 @@ export const useUserStore = defineStore("user", () => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/auth/check", {
+      const response = await fetch("http://localhost:3001/auth/check", {
         method: "GET",
         credentials: "include", // This is important to include cookies
       });
