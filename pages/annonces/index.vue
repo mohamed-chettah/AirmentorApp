@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {fetchWithoutBody} from "~/utils/utils";
+import type { AnnouncementType } from "~/types/AnnouncementType";
 
 const notes = [
   {label: 'Toutes', value: 'all'},
@@ -27,6 +29,20 @@ const skills = [
   {label: 'SEO', value: 'seo'}
 ]
 
+
+const AnnoncesList = ref<AnnouncementType[]>([])
+
+// announcements.get('/', async (c) => {
+// const announcement = await Announcement.find({})
+// return c.json(announcement)
+// })
+const fetchAnnonces = async () => {
+  const res = await fetchWithoutBody('announcements', 'GET')
+  AnnoncesList.value = await res
+}
+
+fetchAnnonces()
+
 </script>
 
 <template>
@@ -43,113 +59,13 @@ const skills = [
       <USelect class="w-48" label="Skills" :options="skills"/>
     </div>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <NuxtLink to="/annonces/1" class="p-0">
+      <NuxtLink :to="'/annonces/' + annonce._id"
+                class="p-0" v-for="annonce in AnnoncesList" :key="annonce._id">
         <UCard>
           <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
-            <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
-            <p class="text-sm text-gray-600">Description de l'annonce</p>
-            <div class="flex gap-4 items-center">
-              <div class="flex gap-1">
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-              </div>
-              <p class="text-sm text-gray-600">5/5</p>
-            </div>
-            <p class="text-sm text-gray-600 font-medium">10 crédits</p>
-          </div>
-        </UCard>
-      </NuxtLink>
-      <NuxtLink to="/annonces/1">
-        <UCard>
-          <div class="flex flex-col gap-4 p-4">
-            <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
-            <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
-            <p class="text-sm text-gray-600">Description de l'annonce</p>
-            <div class="flex gap-4 items-center">
-              <div class="flex gap-1">
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-              </div>
-              <p class="text-sm text-gray-600">5/5</p>
-            </div>
-            <p class="text-sm text-gray-600 font-medium">10 crédits</p>
-          </div>
-        </UCard>
-      </NuxtLink>
-      <NuxtLink to="/annonces/1">
-        <UCard>
-          <div class="flex flex-col gap-4 p-4">
-            <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
-            <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
-            <p class="text-sm text-gray-600">Description de l'annonce</p>
-            <div class="flex gap-4 items-center">
-              <div class="flex gap-1">
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-              </div>
-              <p class="text-sm text-gray-600">5/5</p>
-            </div>
-            <p class="text-sm text-gray-600 font-medium">10 crédits</p>
-          </div>
-        </UCard>
-      </NuxtLink>
-
-      <NuxtLink to="/annonces/1">
-        <UCard>
-          <div class="flex flex-col gap-4 p-4">
-            <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
-            <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
-            <p class="text-sm text-gray-600">Description de l'annonce</p>
-            <div class="flex gap-4 items-center">
-              <div class="flex gap-1">
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-              </div>
-              <p class="text-sm text-gray-600">5/5</p>
-            </div>
-            <p class="text-sm text-gray-600 font-medium">10 crédits</p>
-          </div>
-        </UCard>
-      </NuxtLink>
-      <NuxtLink to="/annonces/1">
-        <UCard>
-          <div class="flex flex-col gap-4 p-4">
-            <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
-            <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
-            <p class="text-sm text-gray-600">Description de l'annonce</p>
-            <div class="flex gap-4 items-center">
-              <div class="flex gap-1">
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-                <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>
-              </div>
-              <p class="text-sm text-gray-600">5/5</p>
-            </div>
-            <p class="text-sm text-gray-600 font-medium">10 crédits</p>
-          </div>
-        </UCard>
-      </NuxtLink>
-      <NuxtLink to="/annonces/1">
-        <UCard>
-          <div class="flex flex-col gap-4 p-4">
-            <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
-            <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
-            <p class="text-sm text-gray-600">Description de l'annonce</p>
+            <h3 class="font-bold text-xl text-gray-800">{{ annonce.title }}</h3>
+            <p class="text-sm text-gray-600">{{ annonce.description }}</p>
             <div class="flex gap-4 items-center">
               <div class="flex gap-1">
                 <UIcon name="i-heroicons-star" class="text-lg text-yellow-400"/>

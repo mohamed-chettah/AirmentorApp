@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { onMounted, ref } from "vue";
 import type { UserType } from "~/types/UserType";
+import type {AnnouncementType} from "~/types/AnnouncementType";
+import {fetchWithoutBody} from "~/utils/utils";
 
 export const useUserStore = defineStore("user", () => {
   const loading = ref(false);

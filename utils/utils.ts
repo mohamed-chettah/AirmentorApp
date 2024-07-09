@@ -1,6 +1,6 @@
 export async function fetchWithoutBody(url: string, method: any, signal : any = null) {
 
-    return await $fetch("http://127.0.0.1:3001/api/" + url, {
+    const promise = $fetch<any>("http://127.0.0.1:3001/api/" + url, {
             method: method,  // Méthode HTTP à utiliser pour la requête
 
             credentials: 'include',
@@ -11,6 +11,7 @@ export async function fetchWithoutBody(url: string, method: any, signal : any = 
             signal: signal ? signal : undefined,
         }
     );
+    return await promise;
 }
 
 export async function fetchWithBody(url: string, method: any, body : any = null, signal : any = null) {

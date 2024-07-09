@@ -1,6 +1,50 @@
 <script setup lang="ts">
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { fetchWithoutBody } from '~/utils/utils';
+import type { AnnouncementType } from '~/types/AnnouncementType';
 
+// Get the route object
+const route = useRoute();
+
+// Extract the announcement ID from the URL
+const announcementId = ref<string | null>(null);
+const announcement = ref<AnnouncementType>({} as AnnouncementType);
+
+// Watch for changes in the route params
+watch(
+    () => route.params.id,
+    (newId) => {
+      if (newId) {
+        announcementId.value = newId as string;
+        fetchAnnouncement();
+      }
+    }
+);
+
+// Fetch announcement details
+const fetchAnnouncement = async () => {
+  if (announcementId.value) {
+    try {
+      const response = await fetchWithoutBody(`announcements/${announcementId.value}`, 'GET');
+      announcement.value = await response as AnnouncementType;
+      console.log('Fetched announcement:', announcement.value);
+    } catch (error) {
+      console.error('Error fetching announcement:', error);
+    }
+  }
+};
+
+// Initial call to set the ID and fetch data if route param is already set
+onMounted(() => {
+  if (route.params.id) {
+    announcementId.value = route.params.id as string;
+    fetchAnnouncement();
+  }
+});
 </script>
+
+
 
 <template>
 <!--&lt;!&ndash;detail d'une annonce-->
@@ -9,7 +53,7 @@
 
   <div class="flex flex-col justify-between md:flex-row gap-6 container mx-auto">
       <div class="w-2/3">
-        <h1 class="text-4xl font-bold text-primary w-full mb-3">Titre de l'annonce</h1>
+        <h1 class="text-4xl font-bold text-primary w-full mb-3">{{ announcement.title }}</h1>
         <h3 class="text-xl text-gray-600 font-bold mb-1">Lieux du cours</h3>
         <div class="mb-6">
           <UBadge color="blue" variant="outline"  i class="rounded-2xl text-lg px-2">
@@ -26,10 +70,7 @@
         </div>
         <h3 class="text-xl text-gray-600 font-bold mb-1">A propos du cours</h3>
         <div class="mb-16">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aperiam debitis deserunt dolorum ducimus ea id iste, magnam molestiae praesentium qui quod totam unde? Accusantium aperiam mollitia obcaecati omnis sit?
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aperiam debitis deserunt dolorum ducimus ea id iste, magnam molestiae praesentium qui quod totam unde? Accusantium aperiam mollitia obcaecati omnis sit?
-          </p>
+          <p>{{ announcement.description}}</p>
         </div>
 
         <div class="mb-6 flex flex-col gap-6">
