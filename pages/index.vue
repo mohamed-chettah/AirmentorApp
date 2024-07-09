@@ -8,6 +8,8 @@ import HeroSection from "~/components/hero-section.vue";
 
   <Categorie />
 
+
+
 </template>
 
 <style scoped>

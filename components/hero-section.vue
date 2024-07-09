@@ -20,7 +20,7 @@ const stats = [
 
       <div class="xl:text-left text-center flex  xl:flex-row flex-col justify-center items-center xl:gap-32 gap-20">
         <div>
-          <h1 class="text-4xl font-bold tracking-tight text-primary sm:text-5xl">
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
             Des mentors experts pour résoudre tous vos problèmes.
           </h1>
 
