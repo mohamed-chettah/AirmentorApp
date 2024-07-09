@@ -1,15 +1,47 @@
 <script setup lang="ts">
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+
 </script>
 
 <template>
 
-  <div class="grid grid-cols-3" >
+  <div class="container mx-auto justify-center grid grid-cols-3 gap-6 my-10" >
 
+
+
+    <NuxtLink to="/annonces/1" class="p-0 col-span-1">
+      <UCard>
+        <div class="flex flex-col gap-4 p-4">
+          <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
+          <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
+          <p class="text-sm text-gray-600">Description de l'annonce</p>
+        </div>
+      </UCard>
+    </NuxtLink>
+
+
+    <NuxtLink to="/annonces/1" class="p-0 col-span-1">
+      <UCard>
+        <div class="flex flex-col gap-4 p-4">
+          <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
+          <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
+          <p class="text-sm text-gray-600">Description de l'annonce</p>
+        </div>
+      </UCard>
+    </NuxtLink>
+
+
+    <NuxtLink to="/annonces/1" class="p-0 col-span-1">
+      <UCard>
+        <div class="flex flex-col gap-4 p-4">
+          <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
+          <h3 class="font-bold text-xl text-gray-800">Titre de l'annonce</h3>
+          <p class="text-sm text-gray-600">Description de l'annonce</p>
+        </div>
+      </UCard>
+    </NuxtLink>
 
 
   </div>
-
 
 
 

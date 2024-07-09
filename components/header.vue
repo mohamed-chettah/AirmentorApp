@@ -29,7 +29,7 @@ async function logout() {
           </div>
           <div class="hidden lg:ml-6 lg:block">
             <div class="flex space-x-4">
-              <a href="#" class="rounded-md bg-primary hover:opacity-65 px-3 py-2 text-sm font-medium text-white">Annonces</a></div>
+              <a href="#" class="rounded-md bg-gray-100 hover:bg-primary px-3 py-2 text-sm font-medium text-primary border-[1px] border-primary hover:text-white">Annonces</a></div>
           </div>
         </div>
         <div class="flex flex-1 justify-center px-2 gap-3 lg:ml-6 lg:justify-end">
@@ -54,8 +54,8 @@ async function logout() {
           <div class="flex items-center">
             <!-- Profile dropdown -->
         <div class="flex flex-row" v-if="!isAuthenticated">
-          <img class="h-6" src="../public/img/google.png" alt="Google logo" />
-          <UButton @click="authenticate" class="bg-gray-100 text-primary rounded-xl hover:text-white xl:text-sm text-xs" variant="solid">Se connecter</UButton>
+
+          <UButton @click="authenticate" class="bg-gray-100 text-primary rounded-xl hover:text-white xl:text-sm text-xs  border-[1px] border-primary" variant="solid">  <img class="h-6" src="../public/img/google.png" alt="Google logo" /> Se connecter</UButton>
         </div>
 
             <Menu as="div" class="relative ml-4 flex-shrink-0" v-else>
