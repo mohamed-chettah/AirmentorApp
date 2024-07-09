@@ -3,7 +3,7 @@
 import {useCategorieStore} from "~/stores/CategorieStore";
 
 useCategorieStore().getAllCategorie().then(() => {
-  console.log('Categories loaded')
+  console.log()
 })
 
 </script>
@@ -21,16 +21,16 @@ useCategorieStore().getAllCategorie().then(() => {
 
   <div class="justify-center grid xl:grid-cols-3 grid-cols-1 gap-6 my-16" >
 
-    <div v-for="index in [0,1,2,3,4,5]" class="col-span-1">
+    <div v-if="useCategorieStore().listCategories" v-for="item in useCategorieStore().listCategories" class="col-span-1">
 
 
         <div class="flex flex-col items-center justify-center gap-4  w-full  ">
           <NuxtLink  to="/annonces" class="">
-            <UCard class="hover:opacity-75  object-cover rounded-xl bg-gradient-to-br from-blue-400 to-cyan-3000 text-white">
-              Design
+            <UCard class="hover:opacity-75  object-cover rounded-xl bg-gradient-to-tl from-indigo-600 to-cyan-300 text-white">
+              {{ item.title }}
             </UCard>
           </NuxtLink>
-          <p class="text-sm text-gray-600">Description de la catégorie</p>
+          <p class="text-sm text-gray-600">  {{ item.description }}</p>
         </div>
 
     </div>

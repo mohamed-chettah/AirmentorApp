@@ -5,6 +5,7 @@ import type {CategorieType} from "~/types/CategorieType";
 
 export const useCategorieStore = defineStore("categorie", () => {
     const loading = ref(false);
+    const listCategories = ref<CategorieType[]>([]);
     const categorie = ref<CategorieType>({
         title: "",
         description: "",
@@ -13,7 +14,7 @@ export const useCategorieStore = defineStore("categorie", () => {
     async function getAllCategorie() {
         try {
             loading.value = true;
-            await $fetch("http://127.0.0.1:3001/api/categories", {
+            listCategories.value = await $fetch("http://127.0.0.1:3001/api/categories", {
                 headers: {
                     "Content-Type": "application/merge-patch+json", // Corrected Content-Type
                     "Accept": "application/ld+json",
@@ -30,6 +31,8 @@ export const useCategorieStore = defineStore("categorie", () => {
 
 
     return {
-        getAllCategorie
+        getAllCategorie,
+        listCategories,
+        loading,
     };
 })
