@@ -1,6 +1,20 @@
 <script setup lang="ts">
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '~/stores/UserStore';
 
+const userStore = useUserStore();
+const { user, isAuthenticated } = storeToRefs(userStore);
+
+async function authenticate() {
+  window.location.href = 'http://localhost:3001/api/auth/google';
+}
+
+async function logout() {
+  await userStore.clearUser();
+  // Redirect to home page or login page after logout
+  window.location.href = '/';
+}
 </script>
 
 <template>
@@ -39,7 +53,12 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
         <div class="hidden lg:ml-4 lg:block">
           <div class="flex items-center">
             <!-- Profile dropdown -->
-            <Menu as="div" class="relative ml-4 flex-shrink-0">
+        <div class="flex flex-row" v-if="!isAuthenticated">
+          <img class="h-6" src="../public/img/google.png" alt="Google logo" />
+          <UButton @click="authenticate" class="bg-gray-100 text-primary rounded-xl hover:text-white xl:text-sm text-xs" variant="solid">Se connecter</UButton>
+        </div>
+
+            <Menu as="div" class="relative ml-4 flex-shrink-0" v-else>
               <div>
                 <MenuButton class="relative flex rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span class="absolute -inset-1.5" />
@@ -95,7 +114,3 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
     </DisclosurePanel>
   </Disclosure>
 </template>
-
-<style scoped>
-
-</style>

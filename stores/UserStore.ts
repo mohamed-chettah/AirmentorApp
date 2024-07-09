@@ -1,73 +1,109 @@
-import type {UserType} from "~/types/UserType";
+import { defineStore } from "pinia";
+import { onMounted, ref } from "vue";
+import type { UserType } from "~/types/UserType";
 
-export const useUserStore = defineStore('user', () => {
-    const isError = ref(false);
-    const user = ref<UserType>({
-        email: '',
-        role: ['ROLE_USER']
-    });
-    const waitList = ref<UserType[]>([]);
-    const router = useRouter()
-    const loading = ref(false);
-    const message = ref('');
+export const useUserStore = defineStore("user", () => {
+  const loading = ref(false);
+  const user = ref<UserType>({
+    name: "",
+    email: "",
+    phoneNumber: "",
+    place: "",
+    password: "",
+    profile_picture: "",
+    grade: 0,
+    credits: 0,
+    description: "",
+    languages: [],
+    googleId: "",
+  });
 
-    const userStorage = localStorage.getItem('user');
-    if (userStorage) {
-        user.value = JSON.parse(userStorage);
-        console.log(user.value);
+  const isAuthenticated = ref(false);
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/auth/check", {
+        method: "GET",
+        credentials: "include", // This is important to include cookies
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        isAuthenticated.value = true;
+        updateUser(data.user);
+        saveUserToLocalStorage(data.user);
+      } else {
+        isAuthenticated.value = false;
+        clearUser();
+      }
+    } catch (error) {
+      console.error("Error checking authentication:", error);
+      isAuthenticated.value = false;
+      clearUser();
     }
+  };
 
-    async function updateReservation(reservationId: number, reservation: UserType){
-        try {
-            loading.value = true;
-            await $fetch('http://127.0.0.1:3/api/reservations/' + reservationId, {
-                headers: {
-                    'Content-Type': 'application/merge-patch+json', // Corrected Content-Type
-                    'Accept': 'application/ld+json'
-                },
-                method: 'PATCH',
-                body: reservation
-            });
-        } catch (e) {
-            console.log(e);
-        } finally {
-            setMessage('La réservation a été mise à jour avec succès');
-            loading.value = false;
-        }
+  const updateUser = (userData: Partial<UserType>) => {
+    user.value = { ...user.value, ...userData };
+  };
 
-        setTimeout(() => {
-            setMessage('')
-        }, 1500)
+  const saveUserToLocalStorage = (userData: Partial<UserType>) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
 
+  const clearUser = () => {
+    user.value = {
+      name: "",
+      email: "",
+      phoneNumber: "",
+      place: "",
+      password: "",
+      profile_picture: "",
+      grade: 0,
+      credits: 0,
+      description: "",
+      languages: [],
+      googleId: "",
+    };
+    localStorage.removeItem("user");
+  };
+
+  const loadUserFromLocalStorage = () => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      updateUser(JSON.parse(storedUser));
     }
+  };
 
-    async function myProfile(userId: number) {
-        try {
-            loading.value = true;
-            await $fetch('http://127.0.0.1:3001/api/users/' + userId, {
-                headers: {
-                    'Content-Type': 'application/merge-patch+json', // Corrected Content-Type
-                    'Accept': 'application/ld+json'
-                },
-                method: 'GET',
-            });
-        } catch (e) {
-            console.log(e);
-        } finally {
-            // setMessage('La réservation a été mise à jour avec succès');
-            loading.value = false;
-        }
-
-        setTimeout(() => {
-            setMessage('')
-        }, 1500)
-
+  async function myProfile(userId: number) {
+    try {
+      loading.value = true;
+      await $fetch("http://127.0.0.1:3001/api/users/" + userId, {
+        headers: {
+          "Content-Type": "application/merge-patch+json", // Corrected Content-Type
+          "Accept": "application/ld+json",
+        },
+        method: "GET",
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      // setMessage('La réservation a été mise à jour avec succès');
+      loading.value = false;
     }
+  }
 
+  onMounted(() => {
+    loadUserFromLocalStorage();
+    checkAuth();
+  });
 
-    function setMessage(msg: string) {
-        message.value = msg;
-    }
-
-    return {user, isError, waitList,loading,message, updateReservation,setMessage, myProfile};
+  return {
+    myProfile,
+    user,
+    isAuthenticated,
+    checkAuth,
+    updateUser,
+    clearUser,
+  };
 });

@@ -1,6 +1,13 @@
 export type UserType = {
-    email?: string
-    username?: string
-    role?: ['ROLE_USER' | 'ROLE_ADMIN'],
-    isConfirmed?: number
-}
+  name: string;
+  email: string;
+  phoneNumber: string;
+  place: string;
+  password: string;
+  profile_picture: string;
+  grade: number;
+  credits: number;
+  description: string;
+  languages: string[];
+  googleId: string;
+};
