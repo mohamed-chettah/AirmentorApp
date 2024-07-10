@@ -18,6 +18,8 @@ export const useUserStore = defineStore("user", () => {
     googleId: "",
   });
 
+  const listUsers = ref<UserType[]>([]);
+
   const isAuthenticated = ref(false);
 
   const checkAuth = async () => {
@@ -99,6 +101,23 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  async function getAllUsers() {
+    try {
+      loading.value = true;
+      listUsers.value = await $fetch("http://localhost:3001/api/users", {
+        method: "GET",
+        credentials: "include", // This is important to include cookies
+      });
+
+    } catch (e) {
+      console.log(e);
+    } finally {
+      // setMessage('La réservation a été mise à jour avec succès');
+      loading.value = false;
+    }
+
+  }
+
   onMounted(() => {
     loadUserFromLocalStorage();
     checkAuth();
@@ -111,5 +130,7 @@ export const useUserStore = defineStore("user", () => {
     checkAuth,
     updateUser,
     clearUser,
+    getAllUsers,
+    listUsers
   };
 });
