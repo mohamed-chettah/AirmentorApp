@@ -2,20 +2,21 @@ import { defineStore } from "pinia";
 import { onMounted, ref } from "vue";
 import type { UserType } from "~/types/UserType";
 import type {CategorieType} from "~/types/CategorieType";
+import type {SkillType} from "~/types/SkillType";
 
-export const useCategorieStore = defineStore("categorie", () => {
+export const useSkillStore = defineStore("skill", () => {
     const loading = ref(false);
-    const listCategories = ref<CategorieType[]>([]);
-    const categorie = ref<CategorieType>({
+    const listSkills = ref<SkillType[]>([]);
+    const skill = ref<SkillType>({
         title: "",
-        description: "",
+        categorie: "",
         _id: "",
     });
 
-    async function getAllCategorie() {
+    async function getAllSkill() {
         try {
             loading.value = true;
-            listCategories.value = await $fetch("http://127.0.0.1:3001/api/categories", {
+            listSkills.value = await $fetch("http://127.0.0.1:3001/api/skills", {
                 method: "GET",
                 credentials: "include", // This is important to include cookies
             });
@@ -28,8 +29,8 @@ export const useCategorieStore = defineStore("categorie", () => {
     }
 
     return {
-        getAllCategorie,
-        listCategories,
+        getAllSkill,
+        listSkills,
         loading,
     };
 })

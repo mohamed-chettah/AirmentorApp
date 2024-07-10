@@ -5,6 +5,8 @@ import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
 const { user, isAuthenticated } = storeToRefs(userStore);
 
+console.log('User:');
+
 // Check authentication status when the app loads
 onMounted(async () => {
   await userStore.checkAuth();
