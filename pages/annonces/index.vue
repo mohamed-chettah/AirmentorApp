@@ -15,9 +15,16 @@ const notes = [
 
 useCategorieStore().getAllCategorie()
 
+
+
 const categories = useCategorieStore().listCategories.map((categorie) => {
   return {label: categorie.title, value: categorie._id}
 })
+
+
+categories.unshift({label: 'Toutes', value: 'all'})
+
+const selectedCategorie = ref('all')
 
 useSkillStore().getAllSkill()
 
@@ -29,12 +36,18 @@ const route = useRoute()
 
 if(route.query.categorie) {
   useAnnouncementStore().getAllAnnouncementByCateg(route.query.categorie as string)
+  categories.forEach((categorie) => {
+    if(categorie.value === route.query.categorie) {
+      selectedCategorie.value = route.query.categorie
+    }
+  })
+  console.log(selectedCategorie.value)
 } else {
   useAnnouncementStore().getAllAnnouncement()
 }
 
 function getAnnouncementByCateg(categorie: string) {
-  console.log(categorie)
+  if(categorie === 'all') return useAnnouncementStore().getAllAnnouncement()
   useAnnouncementStore().getAllAnnouncementByCateg(categorie)
 }
 
@@ -46,12 +59,17 @@ function getAnnouncementByCateg(categorie: string) {
   <!--  des filtres par note / par categorie / par skills-->
   <!--  une liste d'annonces (grid 3 col) sous forme de carde avec une image, un titre, une description, une note, un nombre de credit et un bouton pour voir plus de detail-->
 
+  <div class="flex justify-center items-center mt-10 gap-2">
+    <UIcon name="i-heroicons-squares-2x2-20-solid" class="text-[25px] text-primary" />
+    <h1 class="text-3xl text-primary "> Listes des Annonces : </h1>
+  </div>
+
+
   <div class=" flex flex-col gap-6 container mx-auto">
-    <h1 class="text-4xl font-bold text-primary">Annonces</h1>
     <div class="flex gap-4">
-      <USelect class="w-48" placeholder="Catégorie" @update:modelValue="getAnnouncementByCateg" :options="categories"/>
-      <USelect class="w-48" placeholder="Skills" :options="skills"/>
-      <USelect class="w-48" placeholder="Note" :options="notes"/>
+      <USelect class="w-64" placeholder="Catégorie" v-model="selectedCategorie" @update:modelValue="getAnnouncementByCateg" :options="categories"/>
+<!--      <USelect class="w-48" placeholder="Skills" :options="skills"/>-->
+<!--      <USelect class="w-48" placeholder="Note" :options="notes"/>-->
     </div>
 
     <div v-if="useAnnouncementStore().listAnnouncements.length > 0" class="grid grid-cols-1 gap-4 md:grid-cols-3">

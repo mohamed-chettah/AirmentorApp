@@ -1,21 +1,25 @@
 <script setup lang="ts">
+import ListeCategorie from "~/components/categorie/liste-categorie.vue";
+import ListeSkill from "~/components/skill/liste-skill.vue";
+import ListeUtilisateur from "~/components/utilisateur/liste-utilisateur.vue";
+
 const items = [{
   key: 'categorie',
   label: 'Categories',
-  icon: 'i-heroicons-clipboard-document-list-solid',
+  icon: 'i-heroicons-tag-16-solid',
 }, {
   key: 'skill',
   label: 'Skills',
-  icon: 'i-heroicons-clipboard-document-list-solid',
+  icon: 'i-mdi-lightning-bolt',
 }, {
   key: 'utilisateur',
   label: 'Utilisateurs',
-  icon: 'i-heroicons-clipboard-document-list-solid',
+  icon: 'i-heroicons-user-group-20-solid',
 }]
 </script>
 
 <template>
-  <div class="flex justify-center items-center gap-2">
+  <div class="flex justify-center items-center gap-2 mt-10">
     <UIcon name="i-heroicons-adjustments-horizontal" class="text-[25px] text-primary" />
     <h1 class="text-3xl "> Administration : </h1>
   </div>
@@ -27,19 +31,19 @@ const items = [{
         <div class="flex items-center gap-2 relative truncate">
           <UIcon :name="item.icon" class="w-4 h-4 flex-shrink-0"  :class="{'text-black': !selected, 'text-white': selected}" />
 
-          <span :class="{'text-black': !selected, 'text-white': selected}" class="truncate">{{ index + 1 }}. {{ item.label }}</span>
+          <span :class="{'text-black': !selected, 'text-white': selected}" class="truncate">{{ item.label }}</span>
 
         </div>
       </template>
       <template #item="{ item }" >
         <div v-if="item.key === 'categorie'">
-          ff
+          <ListeCategorie />
         </div>
         <div v-else-if="item.key === 'skill'">
-          gfbd
+          <ListeSkill />
         </div>
         <div v-else-if="item.key === 'utilisateur'">
-
+          <ListeUtilisateur />
         </div>
       </template>
     </UTabs>

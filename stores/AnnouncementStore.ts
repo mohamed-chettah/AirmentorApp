@@ -40,6 +40,7 @@ export const useAnnouncementStore = defineStore("announcement", () => {
                 method: "GET",
                 credentials: "include", // This is important to include cookies
             });
+
         } catch (e) {
             console.log(e);
         } finally {
