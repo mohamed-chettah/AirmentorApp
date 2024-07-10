@@ -84,9 +84,6 @@ const descriptionCategorie = ref('')
     </template>
   </UTable>
 
-
-
-
   <UModal v-model="isOpen">
 
     <form @submit.prevent="submitForm">
