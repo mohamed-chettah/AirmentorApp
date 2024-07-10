@@ -61,10 +61,8 @@ async function fetchUserData() {
 }
 
 onMounted(async () => {
-  const userStorage = localStorage.getItem('user');
-  
   if (userStore.user.name !== "") {
-    await fetchUserData();
+    // await fetchUserData();
   }
 });
 

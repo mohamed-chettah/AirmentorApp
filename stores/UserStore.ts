@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
 import { onMounted, ref } from "vue";
 import type { UserType } from "~/types/UserType";
-import type {AnnouncementType} from "~/types/AnnouncementType";
-import {fetchWithoutBody} from "~/utils/utils";
 
 export const useUserStore = defineStore("user", () => {
   const loading = ref(false);
@@ -32,7 +30,11 @@ export const useUserStore = defineStore("user", () => {
       if (response.ok) {
         const data = await response.json();
         isAuthenticated.value = true;
-        updateUser(data.user);
+
+        const userFetch = await myProfile(data.user.googleId);
+        console.log("flksdjflkj", userFetch);
+
+        updateUser(userFetch);
         saveUserToLocalStorage(data.user);
       } else {
         isAuthenticated.value = false;
@@ -77,16 +79,18 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  async function myProfile(userId: number) {
+  async function myProfile(userId: string) {
     try {
       loading.value = true;
-      await $fetch("http://127.0.0.1:3001/api/users/" + userId, {
-        headers: {
-          "Content-Type": "application/merge-patch+json", // Corrected Content-Type
-          "Accept": "application/ld+json",
-        },
+
+      const rep = await fetch(`http://localhost:3001/api/users/${userId}`, {
         method: "GET",
+        credentials: "include", // This is important to include cookies
       });
+
+      const user = await rep.json();
+
+      return user;
     } catch (e) {
       console.log(e);
     } finally {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/UserStore';
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();
 const { user, isAuthenticated } = storeToRefs(userStore);
@@ -10,12 +11,6 @@ console.log('User:');
 // Check authentication status when the app loads
 onMounted(async () => {
   await userStore.checkAuth();
-  
-  // If authenticated, you might want to fetch additional user data here
-  if (isAuthenticated.value) {
-    // For example, fetch user profile or other necessary data
-    // await fetchUserProfile();
-  }
 });
 
 // Optional: Watch for changes in authentication status
