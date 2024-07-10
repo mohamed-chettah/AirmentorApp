@@ -28,29 +28,30 @@ const state = reactive<Schema>({
   languages: '',
   profile_picture: '',
   credits: 0,
+  grade: 0,
 });
-
-
 const userStore = useUserStore();
 const { user, isAuthenticated } = storeToRefs(userStore); // Assurez-vous que l'ID est disponible
 async function fetchUserData() {
-  console.log(user)
-  console.log(user.value)
   try {
     loading.value = true;
       const response = await fetch('http://localhost:3001/api/users/' + userStore.user.googleId, {
         method: "GET",
         credentials: "include", // This is important to include cookies
       });
+      const user = await response.json()
     // const user = await fetch('http://localhost:3001/users/' + userStore.user.googleId)
     // fetchWithoutBody('users/' + userStore.user.googleId, 'GET');
     if (user) {
+      console.log(user)
+  console.log("ici", user)
       // Update all properties of state with the fetched data
       state.first_name = user.name
       state.languages = user.languages
       state.location = user.location
       state.profile_picture = user.profile_picture
       state.credits = user.credits
+      state.grade = user.grade
       console.log('User data updated successfully');
     }
   } catch (e) {
@@ -61,17 +62,16 @@ async function fetchUserData() {
 }
 
 onMounted(async () => {
-  const userStorage = localStorage.getItem('user');
-  
   if (userStore.user.name !== "") {
     await fetchUserData();
   }
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+  console.log('onSubmit', parsedData)
   try {
     const parsedData = schema.parse(state);
-    const response = await fetchWithBody('users/' + "668cf096042d278f06ea5214", 'PATCH', parsedData);
+    const response = await fetchWithBody('users/' + UserStore.user.googleId, 'PUT', parsedData);
     console.log('Success:', response);
   } catch (e) {
     console.error('Failed to update user data', e);
@@ -120,13 +120,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       <UInput type="number" v-model="state.age"/>
     </UFormGroup>
     <UFormGroup label="Phone" name="phone">
-      <UInput v-model="state.languages" />
+      <UInput v-model="state.phone" />
     </UFormGroup>
     <UFormGroup label="Location" name="location">
       <UInput v-model="state.location" size="xl" />
     </UFormGroup>
 
-            <UButton type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
+            <UButton @click="onSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
 
           </UForm>
         </UCard>
@@ -144,7 +144,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
               <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
             </div>
-            <p>Vous avez une note de <span class="font-bold">5/5</span></p>
+            <p>Vous avez une note de <span class="font-bold">{{state.grade}}/5</span></p>
           </div>
         </UCard>
         <UCard class="w-full flex flex-col items-center ">
