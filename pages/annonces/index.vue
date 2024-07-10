@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { AnnouncementType } from "~/types/AnnouncementType";
+import {useCategorieStore} from "~/stores/CategorieStore";
+import {useSkillStore} from "~/stores/SkillStore";
 
 const notes = [
   {label: 'Toutes', value: 'all'},
@@ -10,23 +12,17 @@ const notes = [
   {label: '5 étoiles', value: '5'}
 ]
 
-const categories = [
-  {label: 'Toutes', value: 'all'},
-  {label: 'Design', value: 'design'},
-  {label: 'Développement Web', value: 'web'},
-  {label: 'SEO', value: 'seo'}
-]
+useCategorieStore().getAllCategorie()
 
-const skills = [
-  {label: 'Toutes', value: 'all'},
-  {label: 'HTML', value: 'html'},
-  {label: 'CSS', value: 'css'},
-  {label: 'JavaScript', value: 'js'},
-  {label: 'React', value: 'react'},
-  {label: 'Vue', value: 'vue'},
-  {label: 'Node', value: 'node'},
-  {label: 'SEO', value: 'seo'}
-]
+const categories = useCategorieStore().listCategories.map((categorie) => {
+  return {label: categorie.title, value: categorie._id}
+})
+
+useSkillStore().getAllSkill()
+
+const skills = useSkillStore().listSkills.map((skill) => {
+  return {label: skill.title, value: skill._id}
+})
 
 
 const AnnoncesList = ref<AnnouncementType[]>([])
@@ -59,10 +55,11 @@ fetchAnnonces()
   <div class=" flex flex-col gap-6 container mx-auto">
     <h1 class="text-4xl font-bold text-primary">Annonces</h1>
     <div class="flex gap-4">
-      <USelect class="w-48" label="Note" :options="notes"/>
-      <USelect class="w-48" label="Catégorie" :options="categories"/>
-      <USelect class="w-48" label="Skills" :options="skills"/>
+      <USelect class="w-48" placeholder="Catégorie" :options="categories"/>
+      <USelect class="w-48" placeholder="Skills" :options="skills"/>
+      <USelect class="w-48" placeholder="Note" :options="notes"/>
     </div>
+
     <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
       <NuxtLink :to="'/annonces/' + annonce._id"
                 class="p-0" v-for="annonce in AnnoncesList" :key="annonce._id">
