@@ -29,7 +29,6 @@ const fetchAnnouncement = async () => {
     try {
       const response = await fetchWithoutBody(`announcements/${announcementId.value}`, 'GET');
       announcement.value = await response as AnnouncementType;
-      console.log('Fetched announcement:', announcement.value);
     } catch (error) {
       console.error('Error fetching announcement:', error);
     }

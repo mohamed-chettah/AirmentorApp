@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { useUserStore } from "~/stores/UserStore";
+import {onMounted, ref} from 'vue';
+import {useUserStore} from "~/stores/UserStore";
 
 const userStore = useUserStore();
 const ws = ref<WebSocket | null>(null);
 let messages = ref<Message[]>([]);
 const newMessage = ref('');
-const username = ref('student'); // Change this to dynamically assign based on the user
 const chatOpen = ref(true); // State to toggle chat visibility
 
 // Define props idAnnouncement
@@ -23,9 +22,7 @@ const getHistoryMessages = async () => {
       method: "GET",
       credentials: "include", // This is important to include cookies
     });
-    const data = await response.json();
-    messages.value = data;
-    console.log('Messages:', messages.value[0]?.content);
+    messages.value = await response.json();
   } catch (error) {
     console.error('Error fetching messages:', error);
   }
