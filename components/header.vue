@@ -33,6 +33,11 @@ async function logout() {
                         active-class="font-bold text-primary underline"
                         class="rounded-md border-primary hover:opacity-65 px-3 pt-1 text-lg font-medium">Annonces
               </NuxtLink>
+
+              <NuxtLink to="/admin"
+                        active-class="font-bold text-primary underline"
+                        class="rounded-md border-primary hover:opacity-65 px-3 pt-1 text-lg font-medium">Administration
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -95,10 +100,16 @@ async function logout() {
     <DisclosurePanel class="lg:hidden">
       <div class="space-y-1 px-2 pb-3 pt-2">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <DisclosureButton as="a" href="#"
-                          class="block rounded-md bg-primary hover:opacity-65 px-3 py-2 text-base font-medium text-white">
+        <NuxtLink as="a" href="/annonces"
+                  active-class="font-bold text-primary underline"
+                          class="block rounded-md   hover:opacity-65 px-3 py-2 text-base font-medium text-black">
           Annonces
-        </DisclosureButton>
+        </NuxtLink>
+        <NuxtLink as="a" href="admin"
+                  active-class="font-bold text-primary underline"
+                          class="block rounded-md  hover:opacity-65 px-3 py-2 text-base font-medium text-black">
+          Administration
+        </NuxtLink>
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
 

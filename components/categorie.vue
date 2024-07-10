@@ -31,7 +31,6 @@ useCategorieStore().getAllCategorie()
 
             </div>
         </UCard>
-
       </NuxtLink>
 
 

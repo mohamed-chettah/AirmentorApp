@@ -10,7 +10,7 @@ const stats = [
 <template>
   <div class="bg-gradient-to-r from-orange-200 to-gray-100 ">
 
-  <div class="mx-32 py-10 flex justify-center flex-col xl:gap-16 gap-10 ">
+  <div class="mx-32 pb-20 flex justify-center flex-col xl:gap-16 gap-10 ">
 
     <div class="flex flex-col gap-8">
 

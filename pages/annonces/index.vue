@@ -2,6 +2,7 @@
 import type { AnnouncementType } from "~/types/AnnouncementType";
 import {useCategorieStore} from "~/stores/CategorieStore";
 import {useSkillStore} from "~/stores/SkillStore";
+import {useAnnouncementStore} from "~/stores/AnnouncementStore";
 
 const notes = [
   {label: 'Toutes', value: 'all'},
@@ -24,25 +25,18 @@ const skills = useSkillStore().listSkills.map((skill) => {
   return {label: skill.title, value: skill._id}
 })
 
+const route = useRoute()
 
-const AnnoncesList = ref<AnnouncementType[]>([])
-
-// announcements.get('/', async (c) => {
-// const announcement = await Announcement.find({})
-// return c.json(announcement)
-// })
-const fetchAnnonces = async () => {
-      const response = await fetch('http://localhost:3001/api/announcements', {
-        method: "GET",
-        credentials: "include", // This is important to include cookies
-      });
-      const parsed = await response.json()
-      
-  // const res = await fetchWithoutBody('announcements', 'GET')
-  AnnoncesList.value = await parsed
+if(route.query.categorie) {
+  useAnnouncementStore().getAllAnnouncementByCateg(route.query.categorie as string)
+} else {
+  useAnnouncementStore().getAllAnnouncement()
 }
 
-fetchAnnonces()
+function getAnnouncementByCateg(categorie: string) {
+  console.log(categorie)
+  useAnnouncementStore().getAllAnnouncementByCateg(categorie)
+}
 
 </script>
 
@@ -55,14 +49,13 @@ fetchAnnonces()
   <div class=" flex flex-col gap-6 container mx-auto">
     <h1 class="text-4xl font-bold text-primary">Annonces</h1>
     <div class="flex gap-4">
-      <USelect class="w-48" placeholder="Catégorie" :options="categories"/>
+      <USelect class="w-48" placeholder="Catégorie" @update:modelValue="getAnnouncementByCateg" :options="categories"/>
       <USelect class="w-48" placeholder="Skills" :options="skills"/>
       <USelect class="w-48" placeholder="Note" :options="notes"/>
     </div>
 
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <NuxtLink :to="'/annonces/' + annonce._id"
-                class="p-0" v-for="annonce in AnnoncesList" :key="annonce._id">
+    <div v-if="useAnnouncementStore().listAnnouncements.length > 0" class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <NuxtLink :to="'/annonces/' + annonce._id" class="p-0" v-for="annonce in useAnnouncementStore().listAnnouncements" :key="annonce._id">
         <UCard>
           <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
@@ -82,6 +75,10 @@ fetchAnnonces()
           </div>
         </UCard>
       </NuxtLink>
+    </div>
+
+    <div v-else>
+      <p>Aucune Annonces</p>
     </div>
   </div>
 </template>

@@ -16,7 +16,7 @@ export const useSkillStore = defineStore("skill", () => {
     async function getAllSkill() {
         try {
             loading.value = true;
-            listSkills.value = await $fetch("http://127.0.0.1:3001/api/skills", {
+            listSkills.value = await $fetch("http://localhost:3001/api/skills", {
                 method: "GET",
                 credentials: "include", // This is important to include cookies
             });
