@@ -33,10 +33,7 @@ async function logout() {
                         class="rounded-md border-primary hover:opacity-65 px-3 pt-1 text-lg font-medium">Annonces
               </NuxtLink>
 
-              <NuxtLink to="/admin"
-                        active-class="font-bold text-primary underline"
-                        class="rounded-md border-primary hover:opacity-65 px-3 pt-1 text-lg font-medium">Administration
-              </NuxtLink>
+
             </div>
           </div>
         </div>
@@ -78,11 +75,16 @@ async function logout() {
               <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                 <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <MenuItem v-slot="{ active }">
-                    <NuxtLink to="/mon-compte" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Mon compte</NuxtLink>
+                    <NuxtLink to="/mon-compte" class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Mon compte</NuxtLink>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <a href="#"
-                       :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
+                    <NuxtLink v-if="useUserStore().user.role == 'ADMIN'" to="/admin" class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Administration
+                    </NuxtLink>
+                  </MenuItem>
+                  <MenuItem v-slot="{ active }">
+                    <NuxtLink to="/mes-annonce"
+                              class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Mes Annonces
+                    </NuxtLink>
                   </MenuItem>
                   <MenuItem @click="logout" v-slot="{ active }">
                             
