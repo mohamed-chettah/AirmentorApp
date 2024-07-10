@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { onMounted, ref } from "vue";
-import type { UserType } from "~/types/UserType";
 import type {CategorieType} from "~/types/CategorieType";
 
 export const useCategorieStore = defineStore("categorie", () => {

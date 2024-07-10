@@ -6,9 +6,10 @@ import type { AnnouncementType } from '~/types/AnnouncementType';
 
 // Get the route object
 const route = useRoute();
+const showChat = ref(false);
 
 // Extract the announcement ID from the URL
-const announcementId = ref<string | null>(null);
+const announcementId = ref<string>("");
 const announcement = ref<AnnouncementType>({} as AnnouncementType);
 
 // Watch for changes in the route params
@@ -146,13 +147,14 @@ onMounted(() => {
               <p class="text-sm text-gray-600">5/5</p>
             </div>
             <p class="text-sm text-gray-600">Tarif horaire: 10 crédits</p>
-            <UButton class="rounded-3xl p-4  text-2xl  w-fit">
+            <UButton  @click="showChat = !showChat" class="rounded-3xl p-4  text-2xl  w-fit">
               <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl "/>
               Contacter
             </UButton>
           </div>
         </UCard>
       </div>
+    <Chat v-if="showChat" :id-announcement="announcementId"/>
     </div>
 
 </template>
