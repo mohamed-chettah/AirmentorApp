@@ -77,12 +77,12 @@ async function logout() {
                   <MenuItem v-slot="{ active }">
                     <NuxtLink to="/mon-compte" class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Mon compte</NuxtLink>
                   </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <NuxtLink v-if="useUserStore().user.role == 'ADMIN'" to="/admin" class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Administration
+                  <MenuItem v-slot="{ active }" v-if="useUserStore().user.role == 'ADMIN'">
+                    <NuxtLink  to="/admin" class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Administration
                     </NuxtLink>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <NuxtLink to="/mes-annonce"
+                    <NuxtLink to="/mes-annonces"
                               class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Mes Annonces
                     </NuxtLink>
                   </MenuItem>
@@ -106,11 +106,6 @@ async function logout() {
                   active-class="font-bold text-primary underline"
                           class="block rounded-md   hover:opacity-65 px-3 py-2 text-base font-medium text-black">
           Annonces
-        </NuxtLink>
-        <NuxtLink as="a" href="admin"
-                  active-class="font-bold text-primary underline"
-                          class="block rounded-md  hover:opacity-65 px-3 py-2 text-base font-medium text-black">
-          Administration
         </NuxtLink>
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
@@ -140,15 +135,15 @@ async function logout() {
           </button>
         </div>
           <div class="mt-3 space-y-1 px-2">
-            <DisclosureButton as="a" href="#"
+            <DisclosureButton as="a" href="/mon-compte"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-            Your Profile
+              Mon compte
           </DisclosureButton>
-            <DisclosureButton as="a" href="#"
+            <DisclosureButton as="a" href="/mes-annonces"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-            Settings
+              Mes annonces
           </DisclosureButton>
-            <DisclosureButton as="a" href="#"
+            <DisclosureButton as="a" href="/admin"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white" @click="logout()">
             Déconnexion
           </DisclosureButton>
