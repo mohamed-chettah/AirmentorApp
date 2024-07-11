@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '#ui/types';
-import { onMounted, reactive, ref } from 'vue';
-import { z } from 'zod';
-import { useUserStore } from "~/stores/UserStore.ts";
-import { fetchWithBody } from '~/utils/utils.ts'; // Mettez à jour le chemin vers vos fonctions
+import type {FormSubmitEvent} from '#ui/types';
+import {onMounted, reactive, ref} from 'vue';
+import {z} from 'zod';
+import {useUserStore} from "~/stores/UserStore.ts";
 
 const loading = ref(false);
 const message = ref('');
@@ -29,15 +28,15 @@ const state = reactive<Schema>({
   grade: 0,
 });
 const userStore = useUserStore();
-const { user, isAuthenticated } = storeToRefs(userStore); // Assurez-vous que l'ID est disponible
+const {user, isAuthenticated} = storeToRefs(userStore); // Assurez-vous que l'ID est disponible
 async function fetchUserData() {
   try {
     loading.value = true;
-      const response = await fetch('http://localhost:3001/api/users/' + userStore.user.googleId, {
-        method: "GET",
-        credentials: "include", // This is important to include cookies
-      });
-      const user = await response.json()
+    const response = await fetch('http://localhost:3001/api/users/' + userStore.user.googleId, {
+      method: "GET",
+      credentials: "include", // This is important to include cookies
+    });
+    const user = await response.json()
 
     if (user) {
       console.log(user)
@@ -70,7 +69,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       name: state.name,
       description: state.description,
     });
-    console.log("parsedData",parsedData)
+    console.log("parsedData", parsedData)
     const response = await fetch(`http://localhost:3001/api/users/${userStore.user.googleId}`, {
       method: 'PUT',
       credentials: "include",
@@ -86,10 +85,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
     const result = await response.json();
     console.log('Success:', result);
-    
+
     // Update the user store with the new data
     userStore.updateUser(result);
-    
+
   } catch (error) {
     console.error('Failed to update user data:', error);
     // Optionally handle the error (e.g., show an error message to the user)
@@ -98,71 +97,73 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-    <section class="grid grid-cols-1 gap-4 md:grid-cols-3 container mx-auto">
-      <!--      Colonne 1 -->
-      <div class="flex flex-col w-full gap-4">
-        <!--    Photo de profile -->
-        <UCard class="w-full flex flex-col items-center ">
-          <h3 class="font-bold w-full text-center pb-3 ">Photo de profil 😊</h3>
-          <NuxtImg
-              :src="state.profile_picture"
-              alt="Profile picture"
-              class="rounded-[15%]  w-60 h-60"
-          />
-        </UCard>
-        <!--    Suppression du compte-->
-        <UCard class="w-full flex flex-col items-center ">
-          <h3 class="font-bold w-full text-center pb-3 ">Suppression du compte 🗑️</h3>
-          <p class="text-center">Vous êtes sur le point de supprimer votre compte. Cette action est irréversible.</p>
-          <div class="flex md:flex-row flex-col justify-center items-center w-full pt-3 gap-6 ">
-            <UButton class="w-fit px-4 rounded-full bg-gray-500 hover:bg-red-600 ">Supprimer</UButton>
+  <section class="grid grid-cols-1 gap-4 md:grid-cols-3 container mx-auto">
+    <!--      Colonne 1 -->
+    <div class="flex flex-col w-full gap-4">
+      <!--    Photo de profile -->
+      <UCard class="w-full flex flex-col items-center ">
+        <h3 class="font-bold w-full text-center pb-3 ">Photo de profil 😊</h3>
+        <NuxtImg
+            :src="state.profile_picture"
+            alt="Profile picture"
+            class="rounded-[15%]  w-60 h-60"
+        />
+      </UCard>
+      <!--    Suppression du compte-->
+      <UCard class="w-full flex flex-col items-center ">
+        <h3 class="font-bold w-full text-center pb-3 ">Suppression du compte 🗑️</h3>
+        <p class="text-center">Vous êtes sur le point de supprimer votre compte. Cette action est irréversible.</p>
+        <div class="flex md:flex-row flex-col justify-center items-center w-full pt-3 gap-6 ">
+          <UButton class="w-fit px-4 rounded-full bg-gray-500 hover:bg-red-600 ">Supprimer</UButton>
+        </div>
+      </UCard>
+    </div>
+    <!--      Colonne 2 -->
+
+    <div class="flex flex-col gap-4">
+      <!--        Information Générale 🤷‍  Forrmualaire️-->
+
+      <UCard class="flex flex-col ">
+        <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
+        <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
+          <UFormGroup label="Name" name="name">
+            <UInput v-model="state.name"/>
+          </UFormGroup>
+          <UFormGroup label="Description" name="description">
+            <UInput v-model="state.description"/>
+          </UFormGroup>
+          <!-- <UFormGroup label="Age" name="age">
+            <UInput type="number" v-model="state.age"/>
+          </UFormGroup> -->
+          <!-- <UFormGroup label="Location" name="location">
+            <UInput v-model="state.location" size="xl" />
+          </UFormGroup> -->
+          <UButton @click="onSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">
+            Modifier
+          </UButton>
+        </UForm>
+      </UCard>
+    </div>
+    <!--      Colonne 3 Map note en etoile et nombre de credit restant -->
+
+    <div class="flex flex-col w-full gap-4">
+      <UCard class="w-full flex flex-col items-center">
+        <h3 class="font-bold w-full text-center pb-3 ">Note et Avis 🌟</h3>
+        <div class="flex flex-col items-center gap-4 ">
+          <div class="flex gap-x-2 ">
+            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
           </div>
-        </UCard>
-      </div>
-      <!--      Colonne 2 -->
-
-      <div class="flex flex-col gap-4">
-        <!--        Information Générale 🤷‍  Forrmualaire️-->
-
-        <UCard class="flex flex-col ">
-          <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
-            <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
-    <UFormGroup label="Name" name="name">
-      <UInput v-model="state.name" />
-    </UFormGroup>
-    <UFormGroup label="Description" name="description">
-      <UInput v-model="state.description" />
-    </UFormGroup>
-    <!-- <UFormGroup label="Age" name="age">
-      <UInput type="number" v-model="state.age"/>
-    </UFormGroup> -->
-    <!-- <UFormGroup label="Location" name="location">
-      <UInput v-model="state.location" size="xl" />
-    </UFormGroup> -->
-            <UButton @click="onSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
-          </UForm>
-        </UCard>
-      </div>
-      <!--      Colonne 3 Map note en etoile et nombre de credit restant -->
-
-      <div class="flex flex-col w-full gap-4">
-        <UCard class="w-full flex flex-col items-center">
-          <h3 class="font-bold w-full text-center pb-3 ">Note et Avis 🌟</h3>
-          <div class="flex flex-col items-center gap-4 ">
-            <div class="flex gap-x-2 ">
-              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-            </div>
-            <p>Vous avez une note de <span class="font-bold">{{state.grade}}/5</span></p>
-          </div>
-        </UCard>
-        <UCard class="w-full flex flex-col items-center ">
-          <h3 class="font-bold w-full text-center pb-3 ">Crédit restant(s) 💰</h3>
-          <p class="text-center">Vous avez <span class="font-bold">{{state.credits}}</span> crédits restants</p>
-        </UCard>
-      </div>
-    </section>
+          <p>Vous avez une note de <span class="font-bold">{{ state.grade }}/5</span></p>
+        </div>
+      </UCard>
+      <UCard class="w-full flex flex-col items-center ">
+        <h3 class="font-bold w-full text-center pb-3 ">Crédit restant(s) 💰</h3>
+        <p class="text-center">Vous avez <span class="font-bold">{{ state.credits }}</span> crédits restants</p>
+      </UCard>
+    </div>
+  </section>
 </template>
