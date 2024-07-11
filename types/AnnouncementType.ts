@@ -16,7 +16,7 @@ export const AnnouncementSchema = z.object({
   _id: z.string().optional(),
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  picture: z.string().url("Must be a valid URL").optional(),
+  picture: z.string().url("Must be a valid URL").nullable(),
   skills: z.array(z.object({})),
   is_activate: z.boolean(),
   createdBy: z.object({}),

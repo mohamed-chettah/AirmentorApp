@@ -73,6 +73,8 @@ const handleSubmit = async () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(form.value),
+  }).then(() => {
+    router.push('/mes-annonces');
   });
 
 };

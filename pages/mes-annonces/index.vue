@@ -22,6 +22,22 @@ const getAnnonceByCreator = async () => {
 
 getAnnonceByCreator();
 
+const deleteAnnouncement = async (id: string) => {
+  try {
+    await fetch(`http://localhost:3001/api/announcements/${id}`, {
+      method: "DELETE",
+      credentials: "include", // This is important to include cookies
+    }).then((res) => {
+      if (res.ok) {
+        listAnnouncements.value = listAnnouncements.value.filter((annonce) => annonce._id !== id);
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+  }
+};
+
 </script>
 <template>
   <main class="container mx-auto">
@@ -37,11 +53,9 @@ getAnnonceByCreator();
         </a>
       </p>
     </li>
-
-    <NuxtLink :to="'/mes-annonces/creer-modif/' + annonce._id" v-for="annonce in listAnnouncements" :key="annonce._id"
-              class="relative flex justify-between gap-x-6 py-5 hover:bg-gray-50">
-      {{annonce._id}}
-
+    <div v-for="annonce in listAnnouncements" :key="annonce._id" class="flex flex-row justify-between items-center gap-6">
+        <NuxtLink :to="'/mes-annonces/creer-modif/' + annonce._id"
+              class="relative w-full flex justify-between gap-x-6 py-5 hover:bg-gray-50">
       <div class="flex min-w-0 gap-x-4">
         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="annonce.createdBy.profile_picture" alt=""/>
         <div class="min-w-0 flex-auto">
@@ -60,6 +74,10 @@ getAnnonceByCreator();
         <UIcon name="i-heroicons-chevron-right" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true"/>
       </div>
     </NuxtLink>
+      <UButton @click="deleteAnnouncement(annonce._id)" class=" w-fit bg-red-500 text-white rounded-full hover:bg-red-600 z-20">
+        <UIcon name="i-heroicons-trash" class="h-5 w-5 flex-none text-white" aria-hidden="true"/>
+      </UButton>
+    </div>
   </main>
 </template>
 

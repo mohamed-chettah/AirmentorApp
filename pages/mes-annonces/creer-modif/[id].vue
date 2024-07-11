@@ -43,6 +43,7 @@ const form = ref<Partial<AnnouncementType>>({
 const schema = AnnouncementSchema; // Associe le schéma Zod à une variable pour UForm
 const route = useRoute();
 const announcementId = route.params.id as string;
+const router = useRouter();
 
 const skillsOptions =  await fetch('http://localhost:3001/api/skills').then(res => res.json());
 
@@ -50,6 +51,7 @@ const fetchAnnouncement = async (id: string) => {
   const res = await fetch(`http://localhost:3001/api/announcements/${id}`);
   const data: AnnouncementType = await res.json();
   console.log(data);
+  // @ts-ignore
   form.value = data.announcement;
 };
 
@@ -72,7 +74,8 @@ const handleSubmit = async () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(form.value),
-  });
+  }).then(() => {
+    router.push('/mes-annonces');  });
 
 };
 
