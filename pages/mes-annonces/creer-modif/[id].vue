@@ -3,13 +3,13 @@
     <UCard class="flex flex-col">
       <h3 class="font-bold w-full text-center pb-3">{{ announcementId ? 'Edit' : 'Create' }} Announcement 📝</h3>
       <UForm :schema="schema" :state="form" class="space-y-4" @submit="handleSubmit">
-        <UFormGroup label="Title" name="title">
+        <UFormGroup label="Titre" name="title">
           <UInput v-model="form.title"/>
         </UFormGroup>
         <UFormGroup label="Description" name="description">
           <UInput v-model="form.description"/>
         </UFormGroup>
-        <UFormGroup label="Is Active" name="is_activate">
+        <UFormGroup label="Annonce active" name="is_activate">
           <UCheckbox v-model="form.is_activate"/>
         </UFormGroup>
         <UFormGroup label="Skills" name="skills">
