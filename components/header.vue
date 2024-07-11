@@ -77,12 +77,12 @@ async function logout() {
                   <MenuItem v-slot="{ active }">
                     <NuxtLink to="/mon-compte" class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Mon compte</NuxtLink>
                   </MenuItem>
-                  <MenuItem v-slot="{ active }" v-if="useUserStore().user.role == 'ADMIN'">
+                  <MenuItem v-slot="{ active }" v-if="userStore.user.role == 'ADMIN'">
                     <NuxtLink  to="/admin" class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Administration
                     </NuxtLink>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <NuxtLink to="/mes-annonces"
+                    <NuxtLink to="/mes-annonce"
                               class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Mes Annonces
                     </NuxtLink>
                   </MenuItem>
@@ -139,14 +139,18 @@ async function logout() {
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
               Mon compte
           </DisclosureButton>
-            <DisclosureButton as="a" href="/mes-annonces"
+          <DisclosureButton v-if="useUserStore().user.role == 'ADMIN'" as="a" href="/admin"
                             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-              Mes annonces
+            Administration
           </DisclosureButton>
-            <DisclosureButton as="a" href="/admin"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white" @click="logout()">
-            Déconnexion
-          </DisclosureButton>
+          <DisclosureButton as="a" href="/mes-annonces"
+                          class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+            Mes annonces
+        </DisclosureButton>
+        <DisclosureButton as="a" href="/admin"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white" @click="logout()">
+        Déconnexion
+      </DisclosureButton>
           </div>
         </div>
       </div>

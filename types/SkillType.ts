@@ -1,5 +1,5 @@
 export type SkillType = {
     title: string;
-    categorie: string;
+    categories: [] | string;
     _id : string;
 };

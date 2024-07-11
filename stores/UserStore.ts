@@ -131,6 +131,20 @@ export const useUserStore = defineStore("user", () => {
         await checkAuth();
     });
 
+    async function deleteUser(id: string) {
+        try {
+            loading.value = true;
+            await $fetch("http://localhost:3001/api/users/" + id, {
+                method: "DELETE",
+                credentials: "include", // This is important to include cookies
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            loading.value = false;
+        }
+    }
+
   return {
     myProfile,
     user,
@@ -138,8 +152,10 @@ export const useUserStore = defineStore("user", () => {
     isAuthenticated,
     checkAuth,
     updateUser,
+      deleteUser,
     logout,
     clearUser,
-    getAllUsers
+    getAllUsers,
+      loading
   };
 });
