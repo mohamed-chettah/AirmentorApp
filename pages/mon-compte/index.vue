@@ -104,7 +104,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     successMessage.value = 'Profile updated successfully!';
-    
+
     // Optionally, clear the message after a few seconds
     setTimeout(() => {
       successMessage.value = '';
