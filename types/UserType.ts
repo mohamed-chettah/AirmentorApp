@@ -20,4 +20,5 @@ export type UserType = {
   googleId: string;
   role: string;
   reviews: Review[];
+  registredAnnouncement: string[];
 };

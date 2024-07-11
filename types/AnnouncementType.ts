@@ -1,6 +1,6 @@
-import type {UserType} from "~/types/UserType";
-import {z} from 'zod';
-import type {SkillType} from "~/types/SkillType";
+import { z } from "zod";
+import type { SkillType } from "~/types/SkillType";
+import type { UserType } from "~/types/UserType";
 
 export type AnnouncementType = {
   _id: string;
@@ -10,6 +10,7 @@ export type AnnouncementType = {
   skills: SkillType[];
   is_activate: boolean;
   createdBy: UserType;
+  registeredUsers: UserType[];
 };
 
 export const AnnouncementSchema = z.object({

@@ -4,15 +4,48 @@
   import type { AnnouncementType } from '~/types/AnnouncementType';
   import { fetchWithoutBody } from '~/utils/utils';
 
+  const userStore = useUserStore();
+
   // Get the route object
   const route = useRoute();
   const showChat = ref(false);
+
+  const isRegistered = computed({
+    get() {
+      return announcement.value.registeredUsers.reduce((acc, us) => acc || us._id === userStore.user._id, false);
+    },
+    set(value) {
+      isRegistered.value = value;
+    }
+  })
 
   const isLoading = ref(true)
 
   // Extract the announcement ID from the URL
   const announcementId = ref<string>("");
   const announcement = ref<AnnouncementType>({} as AnnouncementType);
+
+  async function roll() {
+    try {
+      const response = await fetch(`http://localhost:3001/api/users/enroll/${announcementId.value}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: userStore.user._id }),
+      });
+      if (response.ok) {
+        console.log('User enrolled');
+        isRegistered.value = true;
+      } else {
+        console.error('Error enrolling user');
+      }
+    } catch (error) {
+      console.error('Error enrolling user:', error);
+    }
+  }
+
 
   // Watch for changes in the route params
   watch(
@@ -54,8 +87,6 @@
   // let call = Daily.wrap(MY_IFRAME);
   // call.join({ url: 'https://yourteam.daily.co/hello' });
 </script>
-
-
 
 <template>
 
@@ -144,10 +175,38 @@
             <p class="text-sm text-gray-600" v-else>Il y a 0 avis</p>
           </div>
           <p class="text-sm text-gray-600">Tarif horaire: {{ announcement.createdBy.credits }} crédits</p>
-          <UButton @click="showChat = !showChat" class="rounded-3xl p-4  text-2xl  w-fit">
-            <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl " />
-            Contacter
-          </UButton>
+          <div class="flex flex-row gap-4">
+            <UButton @click="showChat = !showChat" class="rounded-3xl p-4  text-2xl  w-fit">
+              <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl " />
+              Contacter
+            </UButton>
+            <UButton @click="roll" class="rounded-3xl p-4  text-2xl  w-fit" v-if="!isRegistered">
+              <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl " />
+              M'inscrire
+            </UButton>
+            <UButton disabled class="rounded-3xl p-4  text-2xl  w-fit" v-else>
+              <UIcon name="i-heroicons-check-solid" class="text-2xl" />
+              Inscrit
+            </UButton>
+          </div>
+
+          <!-- liste des inscrits -->
+          <div class="flex flex-row gap-4" v-if="announcement.createdBy._id === userStore.user._id">
+            <UMenu>
+              <template #trigger>
+                <UButton class="rounded-3xl p-4  text-2xl  w-fit">
+                  <UIcon name="i-heroicons-users-solid" class="text-2xl " />
+                  Liste des inscrits ({{ announcement.registeredUsers.length }})
+                </UButton>
+              </template>
+              <UMenuItem v-for="user in announcement.registeredUsers" :key="user._id">
+                <div class="flex gap-4 items-center">
+                  <img :src="user.profile_picture" class="w-12 h-12 rounded-full">
+                  <p class="text-gray-800">{{ user.name }}</p>
+                </div>
+              </UMenuItem>
+            </UMenu>
+          </div>
         </div>
       </UCard>
     </div>
