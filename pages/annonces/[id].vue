@@ -63,6 +63,14 @@
           {{ announcement.createdBy.place }}
         </UBadge>
       </div>
+      <h3 class="text-xl text-gray-600 font-bold mb-1">Skills</h3>
+      <div class="mb-6 flex flex-wrap gap-2">
+        <UBadge color="blue" variant="outline" i class="rounded-2xl text-lg px-2" v-for="skill in announcement.skills" :key="skill._id">
+          <UIcon name="i-heroicons-map-pin" class="text-2xl " />
+          {{ skill.title }}
+        </UBadge>
+      </div>
+
       <h3 class="text-xl text-gray-600 font-bold mb-1">A propos du mentor</h3>
       <div class="mb-6">
         <p class="text-wrap">

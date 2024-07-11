@@ -1,12 +1,13 @@
-import { z } from "zod";
-import type { UserType } from "~/types/UserType";
+import type {UserType} from "~/types/UserType";
+import {z} from 'zod';
+import type {SkillType} from "~/types/SkillType";
 
 export type AnnouncementType = {
   _id: string;
   title: string;
   description: string;
   picture: string;
-  skills: Object[];
+  skills: SkillType[];
   is_activate: boolean;
   createdBy: UserType;
 };
@@ -15,9 +16,8 @@ export const AnnouncementSchema = z.object({
   _id: z.string().optional(),
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  picture: z.string().url("Must be a valid URL"),
+  picture: z.string().url("Must be a valid URL").optional(),
   skills: z.array(z.object({})),
   is_activate: z.boolean(),
-  review: z.array(z.object({})),
   createdBy: z.object({}),
 });

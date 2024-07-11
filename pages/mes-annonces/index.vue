@@ -8,7 +8,7 @@ const userStore = useUserStore();
 const userId = userStore.user._id
 
 const listAnnouncements = ref<AnnouncementType[]>([]);
-const getAnnonceByCreator= async () => {
+const getAnnonceByCreator = async () => {
   try {
     const response = await fetch(`http://localhost:3001/api/announcements/creator/${userId}`, {
       method: "GET",
@@ -25,40 +25,41 @@ getAnnonceByCreator();
 </script>
 <template>
   <main class="container mx-auto">
-<!--    ecran gestion de mes annonces-->
+    <!--    ecran gestion de mes annonces-->
     <h1 class="text-4xl font-bold text-primary w-full mb-3">Mes annonces</h1>
-    <ul role="list" class="divide-y divide-gray-100">
-<!--      un li clicable pour creer une annonce-->
-      <li class=" relative flex flex-row justify-center items-center   py-5 bg-gray-100 hover:bg-gray-50">
-          <UIcon name="i-heroicons-plus-circle" class="h-12 w-12 flex-none text-gray-400" aria-hidden="true"/>
-            <p class="text-sm font-semibold leading-6 text-gray-900">
-              <a href="/annonces/creer">
-                <span class="absolute inset-x-0 -top-px bottom-0"/>
-                Créer une annonce
-              </a>
-            </p>
-      </li>
+    <!--      un li clicable pour creer une annonce-->
+    <li class=" relative flex flex-row justify-center items-center   py-5 bg-gray-100 hover:bg-gray-50">
+      <UIcon name="i-heroicons-plus-circle" class="h-12 w-12 flex-none text-gray-400" aria-hidden="true"/>
+      <p class="text-sm font-semibold leading-6 text-gray-900">
+        <a href="/mes-annonces/creer-modif">
+          <span class="absolute inset-x-0 -top-px bottom-0"/>
+          Créer une annonce
+        </a>
+      </p>
+    </li>
 
-      <li v-for="annonce in listAnnouncements" :key="annonce._id" class="relative flex justify-between gap-x-6 py-5 hover:bg-gray-50">
-        <div class="flex min-w-0 gap-x-4">
-          <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="annonce.createdBy.profile_picture" alt=""/>
-          <div class="min-w-0 flex-auto">
-            <p class="text-sm font-semibold leading-6 text-gray-900">{{ annonce.title }}</p>
-            <p class="mt-1 text-xs leading-5 text-gray-500">{{ annonce.description }}</p>
-          </div>
-        </div>
-        <div class="flex shrink-0 items-center gap-x-4">
-          <div class="flex flex-row justify-end items-center gap-3">
-            <p>Public</p>
-<!--            rond rouge ou vert-->
-            <div v-if="annonce.is_activate" class="h-3 w-3 rounded-full bg-green-500"></div>
-            <div v-else class="h-3 w-3 rounded-full bg-red-500"></div>
+    <NuxtLink :to="'/mes-annonces/creer-modif/' + annonce._id" v-for="annonce in listAnnouncements" :key="annonce._id"
+              class="relative flex justify-between gap-x-6 py-5 hover:bg-gray-50">
+      {{annonce._id}}
 
-          </div>
-          <UIcon name="i-heroicons-chevron-right" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true"/>
+      <div class="flex min-w-0 gap-x-4">
+        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="annonce.createdBy.profile_picture" alt=""/>
+        <div class="min-w-0 flex-auto">
+          <p class="text-sm font-semibold leading-6 text-gray-900">{{ annonce.title }}</p>
+          <p class="mt-1 text-xs leading-5 text-gray-500">{{ annonce.description }}</p>
         </div>
-      </li>
-    </ul>
+      </div>
+      <div class="flex shrink-0 items-center gap-x-4">
+        <div class="flex flex-row justify-end items-center gap-3">
+          <p>Public</p>
+          <!--            rond rouge ou vert-->
+          <div v-if="annonce.is_activate" class="h-3 w-3 rounded-full bg-green-500"></div>
+          <div v-else class="h-3 w-3 rounded-full bg-red-500"></div>
+
+        </div>
+        <UIcon name="i-heroicons-chevron-right" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true"/>
+      </div>
+    </NuxtLink>
   </main>
 </template>
 
