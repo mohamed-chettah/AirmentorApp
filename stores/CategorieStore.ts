@@ -26,6 +26,21 @@ export const useCategorieStore = defineStore("categorie", () => {
         }
     }
 
+    async function createCategorie(categorie: CategorieType) {
+        try {
+            loading.value = true;
+            await $fetch("http://localhost:3001/api/categories", {
+                method: "POST",
+                credentials: "include", // This is important to include cookies
+                body: JSON.stringify(categorie),
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            loading.value = false;
+        }
+    }
+
     async function updateCategorie(categorie: CategorieType) {
         try {
             loading.value = true;
@@ -58,6 +73,7 @@ export const useCategorieStore = defineStore("categorie", () => {
 
     return {
         getAllCategorie,
+        createCategorie,
         updateCategorie,
         deleteCategorie,
         listCategories,

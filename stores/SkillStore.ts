@@ -45,6 +45,21 @@ export const useSkillStore = defineStore("skill", () => {
         }
     }
 
+    async function createSkill(skill: SkillType) {
+        try {
+            loading.value = true;
+            await $fetch("http://localhost:3001/api/skills", {
+                method: "POST",
+                credentials: "include", // This is important to include cookies
+                body: JSON.stringify(skill),
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            loading.value = false;
+        }
+    }
+
     async function deleteSkill(id: string) {
         try {
             loading.value = true;
@@ -61,6 +76,7 @@ export const useSkillStore = defineStore("skill", () => {
 
     return {
         getAllSkill,
+        createSkill,
         deleteSkill,
         updateSkill,
         listSkills,

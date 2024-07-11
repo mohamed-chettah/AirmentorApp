@@ -82,14 +82,14 @@ async function logout() {
                     </NuxtLink>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <NuxtLink to="/mes-annonce"
+                    <NuxtLink to="/mes-annonces"
                               class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Mes Annonces
                     </NuxtLink>
                   </MenuItem>
                  <MenuItem @click="logout" v-slot="{ active }">
 
-                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign
-                      out</a>
+                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                      Déconnexion</a>
                   </MenuItem>
                 </MenuItems>
               </transition>
