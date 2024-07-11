@@ -64,10 +64,26 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         }
     }
 
+    async function searchAnnouncementByTitle(title : string){
+        try {
+            loading.value = true;
+            return await $fetch("http://localhost:3001/api/announcements/search/" + title , {
+                method: "GET",
+                credentials: "include", // This is important to include cookies
+            });
+
+        } catch (e) {
+            console.log(e);
+        } finally {
+            loading.value = false;
+        }
+    }
+
     return {
         getAllAnnouncement,
         getAllAnnouncementByCateg,
         searchAnnouncementBySkill,
+        searchAnnouncementByTitle,
         listAnnouncements,
         loading,
     };

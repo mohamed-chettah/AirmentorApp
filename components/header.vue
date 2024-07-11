@@ -1,22 +1,15 @@
 <script setup lang="ts">
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
-import { useUserStore } from '~/stores/UserStore';
+import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue';
+import {storeToRefs} from 'pinia';
+import {ref} from 'vue';
+import {useUserStore} from '~/stores/UserStore';
 
 const userStore = useUserStore();
 const { user, isAuthenticated } = storeToRefs(userStore);
 
-const skillStore = useSkillStore()
-
-const options = ref({});
-onMounted( async () => {
-  await skillStore.getAllSkill()
-  // foreach listSkills in skillStore.skills and keep in options the value and the name of the skill
-  options.value = skillStore.listSkills.map(skill => ({ id: skill._id, name: skill.title }))
-})
-
-const selected = ref('');
+const announcementStore = useAnnouncementStore();
+const selected = ref();
+const loading = ref(false);
 
 async function authenticate() {
   window.location.href = 'http://localhost:3001/auth/google';
@@ -27,25 +20,31 @@ async function logout() {
   window.location.href = 'http://localhost:3001/auth/logout';
 }
 
-async function searchAnnouncements() {
-  if (!selected.value.id) {
-    alert('Veuillez sélectionner un terme de recherche');
-    return;
+async function search (q: string) {
+
+if (!q) {
+    return [];
+}
+
+loading.value = true;
+  const announcement = await $fetch<any[]>('http://localhost:3001/api/announcements/search/' + encodeURIComponent(q), {
+    method: "GET",
+    credentials: "include", // This is important to include cookies
+  })
+  loading.value = false;
+  return announcement;
+}
+
+function redirectAnnouncement() {
+
+  if (selected.value.id) {
+    const router = useRouter();
+    router.push('/annonces/' + selected.value.id);
+    selected.value = null;
   }
-
-  const router = useRouter();
-
-console.log(selected)
-  router.push({
-    path: '/annonces',
-    query: {
-      skills: selected.value.id,
-    },
-  });
 }
 
 </script>
-
 
 <template>
   <Disclosure as="nav" class="bg-white z-50" v-slot="{ open }">
@@ -63,25 +62,23 @@ console.log(selected)
                         active-class="font-bold text-primary underline"
                         class="rounded-md border-primary hover:opacity-65 px-3 pt-1 text-lg font-medium">Annonces
               </NuxtLink>
-
-
             </div>
           </div>
         </div>
         <div class="flex flex-1 justify-center px-2 gap-3 lg:ml-6 lg:justify-end">
+
           <UInputMenu
               v-model="selected"
-              :options="options"
+              :search="search"
+              :loading="loading"
               placeholder="Que souhaiter vous apprendre ?"
+              option-attribute="title"
+              trailing
+              class="w-[40%]"
               by="id"
-              option-attribute="name"
-              :search-attributes="['name']"
-              class="rounded-xl xl:w-72 w-40"
-          >
-            <template #option="{ option: person }"><span class="truncate">{{ person.name }}</span>
-            </template>
+              >
           </UInputMenu>
-          <UButton @click="searchAnnouncements" class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>
+          <UButton  @click="redirectAnnouncement" class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>
         </div>
         <div class="flex lg:hidden">
           <DisclosureButton
