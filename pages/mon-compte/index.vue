@@ -9,19 +9,17 @@ const loading = ref(false);
 const message = ref('');
 
 const schema = z.object({
-  last_name: z.string().min(2, 'Must be at least 2 characters'),
-  first_name: z.string().min(2, 'Must be at least 2 characters'),
-  age: z.number().int().min(12, 'Must be at least 12 years old'),
-  phone: z.string().min(10, 'Must be at least 10 characters'),
-  location: z.string().min(2, 'Must be at least 2 characters'),
+  name: z.string().min(2, 'Must be at least 2 characters'),
+  // age: z.number().int().min(12, 'Must be at least 12 years old'),
+  // phone: z.string().min(10, 'Must be at least 10 characters'),
+  // location: z.string().min(2, 'Must be at least 2 characters'),
   description: z.string().min(10, 'Must be at least 10 characters').max(350, 'Must be at most 350 characters'),
 });
 
 type Schema = z.output<typeof schema>;
 
 const state = reactive<Schema>({
-  last_name: '',
-  first_name: '',
+  name: '',
   age: 0,
   phoneNumber: '',
   location: '',
@@ -44,9 +42,10 @@ async function fetchUserData() {
     if (user) {
       console.log(user)
       // Update all properties of state with the fetched data
-      state.first_name = user.name
-      state.languages = user.languages
-      state.location = user.location
+      state.name = user.name
+      state.description = user.description
+      // state.languages = user.languages
+      // state.location = user.location
       state.profile_picture = user.profile_picture
       state.credits = user.credits
       state.grade = user.grade
@@ -66,13 +65,34 @@ onMounted(async () => {
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log('onSubmit', parsedData)
   try {
-    const parsedData = schema.parse(state);
-    const response = await fetchWithBody('users/' + UserStore.user.googleId, 'PUT', parsedData);
-    console.log('Success:', response);
-  } catch (e) {
-    console.error('Failed to update user data', e);
+    const parsedData = schema.parse({
+      name: state.name,
+      description: state.description,
+    });
+    console.log("parsedData",parsedData)
+    const response = await fetch(`http://localhost:3001/api/users/${userStore.user.googleId}`, {
+      method: 'PUT',
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(parsedData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Success:', result);
+    
+    // Update the user store with the new data
+    userStore.updateUser(result);
+    
+  } catch (error) {
+    console.error('Failed to update user data:', error);
+    // Optionally handle the error (e.g., show an error message to the user)
   }
 }
 </script>
@@ -89,10 +109,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               alt="Profile picture"
               class="rounded-[15%]  w-60 h-60"
           />
-          <div class="flex md:flex-row flex-col justify-center items-center w-full pt-3 gap-6 ">
-            <UIcon name="i-heroicons-trash" class="scale-125 text-red-600 cursor-pointer hover:text-red-800"/>
-            <UButton class="w-fit px-4 rounded-full ">Changer</UButton>
-          </div>
         </UCard>
         <!--    Suppression du compte-->
         <UCard class="w-full flex flex-col items-center ">
@@ -112,20 +128,18 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
             <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
     <UFormGroup label="Name" name="name">
-      <UInput v-model="state.first_name" />
+      <UInput v-model="state.name" />
     </UFormGroup>
-    <UFormGroup label="Age" name="age">
+    <UFormGroup label="Description" name="description">
+      <UInput v-model="state.description" />
+    </UFormGroup>
+    <!-- <UFormGroup label="Age" name="age">
       <UInput type="number" v-model="state.age"/>
-    </UFormGroup>
-    <UFormGroup label="Phone" name="phone">
-      <UInput v-model="state.phone" />
-    </UFormGroup>
-    <UFormGroup label="Location" name="location">
+    </UFormGroup> -->
+    <!-- <UFormGroup label="Location" name="location">
       <UInput v-model="state.location" size="xl" />
-    </UFormGroup>
-
+    </UFormGroup> -->
             <UButton @click="onSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
-
           </UForm>
         </UCard>
       </div>
