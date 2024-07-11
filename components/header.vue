@@ -11,11 +11,8 @@ async function authenticate() {
 }
 
 async function logout() {
-  console.log("logout")
-  // await userStore.clearUser();
-  await userStore.logout();
-  // Redirect to home page or login page after logout
-  window.location.href = '/';
+  console.log('logout')
+  window.location.href = 'http://localhost:3001/auth/logout';
 }
 </script>
 
@@ -89,9 +86,10 @@ async function logout() {
                               class="block px-4 py-2 text-sm"  active-class="font-bold text-primary underline">Mes Annonces
                     </NuxtLink>
                   </MenuItem>
-                  <MenuItem @click="logout" v-slot="{ active }">
-                            
-                    <a href="#" @click="logout()" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Déconnexion</a>
+                 <MenuItem @click="logout" v-slot="{ active }">
+
+                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign
+                      out</a>
                   </MenuItem>
                 </MenuItems>
               </transition>

@@ -40,11 +40,9 @@ async function fetchUserData() {
         credentials: "include", // This is important to include cookies
       });
       const user = await response.json()
-    // const user = await fetch('http://localhost:3001/users/' + userStore.user.googleId)
-    // fetchWithoutBody('users/' + userStore.user.googleId, 'GET');
+
     if (user) {
       console.log(user)
-  console.log("ici", user)
       // Update all properties of state with the fetched data
       state.first_name = user.name
       state.languages = user.languages
@@ -62,8 +60,8 @@ async function fetchUserData() {
 }
 
 onMounted(async () => {
-  if (userStore.user.name !== "") {
-    // await fetchUserData();
+  if (user.name !== "") {
+    await fetchUserData();
   }
 });
 
