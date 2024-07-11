@@ -126,18 +126,20 @@ export const useUserStore = defineStore("user", () => {
       loading.value = false;
     }
 
-  }onMounted(() => {
+  }onMounted(async () => {
         loadUserFromLocalStorage();
-        checkAuth();
+        await checkAuth();
     });
 
   return {
     myProfile,
     user,
+      listUsers,
     isAuthenticated,
     checkAuth,
     updateUser,
     logout,
     clearUser,
+    getAllUsers
   };
 });

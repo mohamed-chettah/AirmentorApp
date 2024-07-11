@@ -45,7 +45,7 @@ export const useCategorieStore = defineStore("categorie", () => {
     async function deleteCategorie(id: string) {
         try {
             loading.value = true;
-            await $fetch("http://localhost:3001/api/categories" + id, {
+            await $fetch("http://localhost:3001/api/categories/" + id, {
                 method: "DELETE",
                 credentials: "include", // This is important to include cookies
             });
