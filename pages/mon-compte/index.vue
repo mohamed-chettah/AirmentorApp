@@ -63,7 +63,7 @@ async function fetchUserData() {
 
 onMounted(async () => {
   if (userStore.user.name !== "") {
-    await fetchUserData();
+    // await fetchUserData();
   }
 });
 

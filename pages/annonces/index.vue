@@ -2,6 +2,7 @@
 import type { AnnouncementType } from "~/types/AnnouncementType";
 import {useCategorieStore} from "~/stores/CategorieStore";
 import {useSkillStore} from "~/stores/SkillStore";
+import {useAnnouncementStore} from "~/stores/AnnouncementStore";
 
 const notes = [
   {label: 'Toutes', value: 'all'},
@@ -14,9 +15,16 @@ const notes = [
 
 useCategorieStore().getAllCategorie()
 
+
+
 const categories = useCategorieStore().listCategories.map((categorie) => {
   return {label: categorie.title, value: categorie._id}
 })
+
+
+categories.unshift({label: 'Toutes', value: 'all'})
+
+const selectedCategorie = ref('all')
 
 useSkillStore().getAllSkill()
 
@@ -24,25 +32,24 @@ const skills = useSkillStore().listSkills.map((skill) => {
   return {label: skill.title, value: skill._id}
 })
 
+const route = useRoute()
 
-const AnnoncesList = ref<AnnouncementType[]>([])
-
-// announcements.get('/', async (c) => {
-// const announcement = await Announcement.find({})
-// return c.json(announcement)
-// })
-const fetchAnnonces = async () => {
-      const response = await fetch('http://localhost:3001/api/announcements', {
-        method: "GET",
-        credentials: "include", // This is important to include cookies
-      });
-      const parsed = await response.json()
-      
-  // const res = await fetchWithoutBody('announcements', 'GET')
-  AnnoncesList.value = await parsed
+if(route.query.categorie) {
+  useAnnouncementStore().getAllAnnouncementByCateg(route.query.categorie as string)
+  categories.forEach((categorie) => {
+    if(categorie.value === route.query.categorie) {
+      selectedCategorie.value = route.query.categorie
+    }
+  })
+  console.log(selectedCategorie.value)
+} else {
+  useAnnouncementStore().getAllAnnouncement()
 }
 
-fetchAnnonces()
+function getAnnouncementByCateg(categorie: string) {
+  if(categorie === 'all') return useAnnouncementStore().getAllAnnouncement()
+  useAnnouncementStore().getAllAnnouncementByCateg(categorie)
+}
 
 </script>
 
@@ -52,17 +59,21 @@ fetchAnnonces()
   <!--  des filtres par note / par categorie / par skills-->
   <!--  une liste d'annonces (grid 3 col) sous forme de carde avec une image, un titre, une description, une note, un nombre de credit et un bouton pour voir plus de detail-->
 
+  <div class="flex justify-center items-center mt-10 gap-2">
+    <UIcon name="i-heroicons-squares-2x2-20-solid" class="text-[25px] text-primary" />
+    <h1 class="text-3xl text-primary "> Listes des Annonces : </h1>
+  </div>
+
+
   <div class=" flex flex-col gap-6 container mx-auto">
-    <h1 class="text-4xl font-bold text-primary">Annonces</h1>
     <div class="flex gap-4">
-      <USelect class="w-48" placeholder="Catégorie" :options="categories"/>
-      <USelect class="w-48" placeholder="Skills" :options="skills"/>
-      <USelect class="w-48" placeholder="Note" :options="notes"/>
+      <USelect class="w-64" placeholder="Catégorie" v-model="selectedCategorie" @update:modelValue="getAnnouncementByCateg" :options="categories"/>
+<!--      <USelect class="w-48" placeholder="Skills" :options="skills"/>-->
+<!--      <USelect class="w-48" placeholder="Note" :options="notes"/>-->
     </div>
 
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <NuxtLink :to="'/annonces/' + annonce._id"
-                class="p-0" v-for="annonce in AnnoncesList" :key="annonce._id">
+    <div v-if="useAnnouncementStore().listAnnouncements.length > 0" class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <NuxtLink :to="'/annonces/' + annonce._id" class="p-0" v-for="annonce in useAnnouncementStore().listAnnouncements" :key="annonce._id">
         <UCard>
           <div class="flex flex-col gap-4 p-4">
             <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
@@ -82,6 +93,10 @@ fetchAnnonces()
           </div>
         </UCard>
       </NuxtLink>
+    </div>
+
+    <div v-else>
+      <p>Aucune Annonces</p>
     </div>
   </div>
 </template>
