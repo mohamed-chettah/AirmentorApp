@@ -11,4 +11,5 @@ export type UserType = {
     description: string;
     languages: string[];
     googleId: string;
+    role: string
 };

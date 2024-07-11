@@ -17,6 +17,7 @@ export const useUserStore = defineStore("user", () => {
         description: "",
         languages: [],
         googleId: "",
+        role: "",
     });
 
     const listUsers = ref<UserType[]>([]);
@@ -71,6 +72,7 @@ export const useUserStore = defineStore("user", () => {
             description: "",
             languages: [],
             googleId: "",
+            role: "",
         };
         localStorage.removeItem("user");
     };
