@@ -59,7 +59,6 @@ function submitForm() {
     // Update existing category
     categorieStore.updateCategorie(categBody.value)
         .then(() => {
-          alert('Catégorie modifiée avec succès');
           categorieStore.getAllCategorie();
           isOpen.value = false;
         })
@@ -70,7 +69,6 @@ function submitForm() {
   } else {
     categorieStore.createCategorie(categBody.value)
         .then(() => {
-          alert('Catégorie créée avec succès');
           categorieStore.getAllCategorie();
           isOpen.value = false;
         })
@@ -87,7 +85,16 @@ function deleteCategorie(row: CategorieType) {
   if (confirmDelete) {
     categorieStore.deleteCategorie(row._id)
         .then(() => {
-          alert('Catégorie supprimée avec succès');
+          const toast = useToast()
+
+          toast.add({
+            id: 'delete_files',
+            title: 'Suppression de la catégorie',
+            description: 'La catégorie a été supprimé avec succès',
+            icon: 'i-octicon-desktop-download-24',
+            timeout: 3000
+          })
+
           categorieStore.getAllCategorie();
         })
         .catch((error) => {

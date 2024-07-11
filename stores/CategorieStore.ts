@@ -37,6 +37,15 @@ export const useCategorieStore = defineStore("categorie", () => {
         } catch (e) {
             console.log(e);
         } finally {
+            const toast = useToast()
+
+            toast.add({
+                id: 'delete_files',
+                title: 'Création de la catégorie',
+                description: 'La catégorie a été créé avec succès',
+                icon: 'i-octicon-desktop-download-24',
+                timeout: 3000
+            })
             loading.value = false;
         }
     }
@@ -53,6 +62,16 @@ export const useCategorieStore = defineStore("categorie", () => {
             console.log(e);
         }
         finally {
+            const toast = useToast()
+
+            toast.add({
+                id: 'delete_files',
+                title: 'Mise à jour de la catégorie',
+                description: 'La catégorie a été mise à jour avec succès',
+                icon: 'i-octicon-desktop-download-24',
+                timeout: 3000
+            })
+
             loading.value = false;
         }
     }

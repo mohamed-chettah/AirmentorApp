@@ -90,7 +90,16 @@ function deleteSkill(row: SkillType) {
   if (confirmDelete) {
     skillStore.deleteSkill(row._id)
         .then(() => {
-          alert('Compétence supprimée avec succès');
+          const toast = useToast()
+
+          toast.add({
+            id: 'delete_files',
+            title: 'Suppression de la compétence',
+            description: 'La compétence supprimé avec succès',
+            icon: 'i-octicon-desktop-download-24',
+            timeout: 3000
+          })
+
           skillStore.getAllSkill();
         })
         .catch((error) => {

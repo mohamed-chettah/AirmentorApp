@@ -31,7 +31,15 @@ function deleteUser(row : UserType) {
   if (confirmDelete) {
     userStore.deleteUser(row._id)
         .then(() => {
-          alert('Utilisateur supprimée avec succès');
+          const toast = useToast()
+
+          toast.add({
+            id: 'delete_files',
+            title: 'Suppression Utilisateur',
+            description: 'L \'utilisateur a été supprimé avec succès',
+            icon: 'i-octicon-desktop-download-24',
+            timeout: 3000
+          })
           userStore.getAllUsers()
         })
         .catch((error) => {

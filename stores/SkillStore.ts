@@ -41,6 +41,16 @@ export const useSkillStore = defineStore("skill", () => {
             console.log(e);
         }
         finally {
+            const toast = useToast()
+
+            toast.add({
+                id: 'delete_files',
+                title: 'Mise à jour de la compétence',
+                description: 'La compétence a été mise à jour avec succès',
+                icon: 'i-octicon-desktop-download-24',
+                timeout: 3000
+            })
+
             loading.value = false;
         }
     }
@@ -56,6 +66,16 @@ export const useSkillStore = defineStore("skill", () => {
         } catch (e) {
             console.log(e);
         } finally {
+            const toast = useToast()
+
+            toast.add({
+                id: 'delete_files',
+                title: 'Création de la compétence',
+                description: 'La compétence a été créé avec succès',
+                icon: 'i-octicon-desktop-download-24',
+                timeout: 3000
+            })
+
             loading.value = false;
         }
     }
