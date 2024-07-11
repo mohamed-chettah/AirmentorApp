@@ -2,6 +2,8 @@
 import {useCategorieStore} from "~/stores/CategorieStore";
 import type {CategorieType} from "~/types/CategorieType";
 
+
+
 useUserStore().getAllUsers()
 
 const columns = [{
