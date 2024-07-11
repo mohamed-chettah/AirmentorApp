@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '#ui/types';
-import { onMounted, reactive, ref } from 'vue';
-import { z } from 'zod';
-import { useUserStore } from "~/stores/UserStore.ts";
-import { fetchWithBody } from '~/utils/utils.ts'; // Mettez à jour le chemin vers vos fonctions
+import type {FormSubmitEvent} from '#ui/types';
+import {onMounted, reactive, ref} from 'vue';
+import {z} from 'zod';
+import {useUserStore} from "~/stores/UserStore.ts";
+import {fetchWithBody} from '~/utils/utils.ts'; // Mettez à jour le chemin vers vos fonctions
 
 const loading = ref(false);
 const message = ref('');
@@ -16,7 +16,7 @@ const schema = z.object({
   phoneNumber: z.string().min(10, 'Must be at least 10 characters'),
   place: z.string().min(2, 'Must be at least 2 characters'),
   description: z.string().min(10, 'Must be at least 10 characters').max(350, 'Must be at most 350 characters'),
-    languages: z.array(z.string()).min(1, 'At least one language is required'),
+  languages: z.array(z.string()).min(1, 'At least one language is required'),
 
 });
 
@@ -40,7 +40,7 @@ const state = reactive<Schema>({
   grade: 0,
 });
 const userStore = useUserStore();
-const { user, isAuthenticated } = storeToRefs(userStore); // Assurez-vous que l'ID est disponible
+const {user, isAuthenticated} = storeToRefs(userStore); // Assurez-vous que l'ID est disponible
 async function fetchUserData() {
   try {
     loading.value = true;
@@ -103,7 +103,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    successMessage.value = 'Profile updated successfully!';
+    successMessage.value = 'Profil mise à jour avec succès';
 
     // Optionally, clear the message after a few seconds
     setTimeout(() => {
@@ -123,54 +123,55 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-    <section class="grid grid-cols-1 gap-4 md:grid-cols-3 container mx-auto">
-      <!--      Colonne 1 -->
-      <div class="flex flex-col w-full gap-4">
-        <!--    Photo de profile -->
-        <UCard class="w-full flex flex-col items-center ">
-          <h3 class="font-bold w-full text-center pb-3 ">Photo de profil 😊</h3>
-          <NuxtImg
-              :src="state.profile_picture"
-              alt="Profile picture"
-              class="rounded-[15%]  w-60 h-60"
-          />
-        </UCard>
-        <!--    Suppression du compte-->
-        <UCard class="w-full flex flex-col items-center ">
-          <h3 class="font-bold w-full text-center pb-3 ">Suppression du compte 🗑️</h3>
-          <p class="text-center">Vous êtes sur le point de supprimer votre compte. Cette action est irréversible.</p>
-          <div class="flex md:flex-row flex-col justify-center items-center w-full pt-3 gap-6 ">
-            <UButton @click="deleteAccount" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-red-600 ">Supprimer</UButton>
-          </div>
-        </UCard>
-      </div>
-      <!--      Colonne 2 -->
+  <section class="grid grid-cols-1 gap-4 md:grid-cols-3 container mx-auto">
+    <!--      Colonne 1 -->
+    <div class="flex flex-col w-full gap-4">
+      <!--    Photo de profile -->
+      <UCard class="w-full flex flex-col items-center ">
+        <h3 class="font-bold w-full text-center pb-3 ">Photo de profil 😊</h3>
+        <NuxtImg
+            :src="state.profile_picture"
+            alt="Profile picture"
+            class="rounded-[15%]  w-60 h-60"
+        />
+      </UCard>
+      <!--    Suppression du compte-->
+      <UCard class="w-full flex flex-col items-center ">
+        <h3 class="font-bold w-full text-center pb-3 ">Suppression du compte 🗑️</h3>
+        <p class="text-center">Vous êtes sur le point de supprimer votre compte. Cette action est irréversible.</p>
+        <div class="flex md:flex-row flex-col justify-center items-center w-full pt-3 gap-6 ">
+          <UButton @click="deleteAccount" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-red-600 ">Supprimer
+          </UButton>
+        </div>
+      </UCard>
+    </div>
+    <!--      Colonne 2 -->
 
-      <div class="flex flex-col gap-4">
-        <!--        Information Générale 🤷‍  Forrmualaire️-->
+    <div class="flex flex-col gap-4">
+      <!--        Information Générale 🤷‍  Forrmualaire️-->
 
         <UCard class="flex flex-col ">
           <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
             <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
-    <UFormGroup label="Name" name="name">
+    <UFormGroup label="Nom" name="name">
       <UInput v-model="state.name" />
     </UFormGroup>
     <UFormGroup label="Description" name="description">
       <UTextarea v-model="state.description" />
     </UFormGroup>
-    <UFormGroup label="Phone Number" name="Phone Number">
+    <UFormGroup label="Numéro de téléphone" name="Phone Number">
       <UInput v-model="state.phoneNumber" />
     </UFormGroup>
-    <UFormGroup label="Place" name="place">
+    <UFormGroup label="Lieu" name="place">
       <UInput v-model="state.place" size="xl" />
     </UFormGroup>
-    <UFormGroup label="Languages" name="languages">
+    <UFormGroup label="Langues" name="languages">
         <UInput
           v-model="languagesInput"
-          placeholder="e.g. French, German, English"
+          placeholder="ex : Français, Anglais..."
         />
         <p class="text-sm text-gray-500 mt-1">
-          Separate languages with commas
+          Séparer les langues avec des ;
         </p>
       </UFormGroup>
             <UButton @click="onSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
