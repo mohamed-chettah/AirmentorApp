@@ -10,6 +10,7 @@ const message = ref('');
 const successMessage = ref('');
 
 
+
 const schema = z.object({
   name: z.string().min(2, 'Must be at least 2 characters'),
   phoneNumber: z.string().min(10, 'Must be at least 10 characters'),
@@ -43,11 +44,11 @@ const {user, isAuthenticated} = storeToRefs(userStore); // Assurez-vous que l'ID
 async function fetchUserData() {
   try {
     loading.value = true;
-    const response = await fetch('http://localhost:3001/api/users/' + userStore.user.googleId, {
-      method: "GET",
-      credentials: "include", // This is important to include cookies
-    });
-    const user = await response.json()
+      const response = await fetch('http://localhost:3001/api/users/' + userStore.user.googleId, {
+        method: "GET",
+        credentials: "include", // This is important to include cookies
+      });
+      const user = await response.json()
 
     if (user) {
       console.log(user)
@@ -89,7 +90,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       place: state.place,
       languages: state.languages,
     });
-    console.log("parsedData", parsedData)
+    console.log("parsedData",parsedData)
     const response = await fetch(`http://localhost:3001/api/users/${userStore.user.googleId}`, {
       method: 'PUT',
       credentials: "include",
@@ -102,7 +103,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    successMessage.value = 'Profile updated successfully!';
+    successMessage.value = 'Profil mise à jour avec succès';
 
     // Optionally, clear the message after a few seconds
     setTimeout(() => {
@@ -110,10 +111,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     }, 5000);
     const result = await response.json();
     console.log('Success:', result);
-
+    
     // Update the user store with the new data
     userStore.updateUser(result);
-
+    
   } catch (error) {
     console.error('Failed to update user data:', error);
     // Optionally handle the error (e.g., show an error message to the user)
@@ -149,58 +150,56 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <div class="flex flex-col gap-4">
       <!--        Information Générale 🤷‍  Forrmualaire️-->
 
-      <UCard class="flex flex-col ">
-        <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
-        <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
-          <UFormGroup label="Name" name="name">
-            <UInput v-model="state.name"/>
-          </UFormGroup>
-          <UFormGroup label="Description" name="description">
-            <UTextarea v-model="state.description"/>
-          </UFormGroup>
-          <UFormGroup label="Phone Number" name="Phone Number">
-            <UInput v-model="state.phoneNumber"/>
-          </UFormGroup>
-          <UFormGroup label="Place" name="place">
-            <UInput v-model="state.place" size="xl"/>
-          </UFormGroup>
-          <UFormGroup label="Languages" name="languages">
-            <UInput
-                v-model="languagesInput"
-                placeholder="e.g. French, German, English"
-            />
-            <p class="text-sm text-gray-500 mt-1">
-              Separate languages with commas
-            </p>
-          </UFormGroup>
-          <UButton @click="onSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">
-            Modifier
-          </UButton>
-        </UForm>
-        <p v-if="successMessage" class="mt-4 text-green-600 font-bold">{{ successMessage }}</p>
+        <UCard class="flex flex-col ">
+          <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
+            <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
+    <UFormGroup label="Nom" name="name">
+      <UInput v-model="state.name" />
+    </UFormGroup>
+    <UFormGroup label="Description" name="description">
+      <UTextarea v-model="state.description" />
+    </UFormGroup>
+    <UFormGroup label="Numéro de téléphone" name="Phone Number">
+      <UInput v-model="state.phoneNumber" />
+    </UFormGroup>
+    <UFormGroup label="Lieu" name="place">
+      <UInput v-model="state.place" size="xl" />
+    </UFormGroup>
+    <UFormGroup label="Langues" name="languages">
+        <UInput
+          v-model="languagesInput"
+          placeholder="ex : Français, Anglais..."
+        />
+        <p class="text-sm text-gray-500 mt-1">
+          Séparer les langues avec des ;
+        </p>
+      </UFormGroup>
+            <UButton @click="onSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
+          </UForm>
+              <p v-if="successMessage" class="mt-4 text-green-600 font-bold">{{ successMessage }}</p>
 
-      </UCard>
-    </div>
-    <!--      Colonne 3 Map note en etoile et nombre de credit restant -->
+        </UCard>
+      </div>
+      <!--      Colonne 3 Map note en etoile et nombre de credit restant -->
 
-    <div class="flex flex-col w-full gap-4">
-      <UCard class="w-full flex flex-col items-center">
-        <h3 class="font-bold w-full text-center pb-3 ">Note et Avis 🌟</h3>
-        <div class="flex flex-col items-center gap-4 ">
-          <div class="flex gap-x-2 ">
-            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
-            <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+      <div class="flex flex-col w-full gap-4">
+        <UCard class="w-full flex flex-col items-center">
+          <h3 class="font-bold w-full text-center pb-3 ">Note et Avis 🌟</h3>
+          <div class="flex flex-col items-center gap-4 ">
+            <div class="flex gap-x-2 ">
+              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+              <UIcon name="i-heroicons-star" class="text-4xl text-yellow-400"/>
+            </div>
+            <p>Vous avez une note de <span class="font-bold">{{state.grade}}/5</span></p>
           </div>
-          <p>Vous avez une note de <span class="font-bold">{{ state.grade }}/5</span></p>
-        </div>
-      </UCard>
-      <UCard class="w-full flex flex-col items-center ">
-        <h3 class="font-bold w-full text-center pb-3 ">Crédit restant(s) 💰</h3>
-        <p class="text-center">Vous avez <span class="font-bold">{{ state.credits }}</span> crédits restants</p>
-      </UCard>
-    </div>
-  </section>
+        </UCard>
+        <UCard class="w-full flex flex-col items-center ">
+          <h3 class="font-bold w-full text-center pb-3 ">Crédit restant(s) 💰</h3>
+          <p class="text-center">Vous avez <span class="font-bold">{{state.credits}}</span> crédits restants</p>
+        </UCard>
+      </div>
+    </section>
 </template>

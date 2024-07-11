@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useCategorieStore } from "~/stores/CategorieStore";
 import { useSkillStore } from "~/stores/SkillStore";
-import type { SkillType } from "~/types/SkillType";
+import {type SkillType} from "~/types/SkillType";
 
 const categorieStore = useCategorieStore();
 categorieStore.getAllCategorie();
@@ -61,8 +61,6 @@ function submitForm() {
       categories: selectedCategorie.value
     };
   }
-
-  console.log(skill.value)
 
   if (idSkill.value) {
     skillStore.updateSkill( skill.value)
