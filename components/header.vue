@@ -11,7 +11,9 @@ async function authenticate() {
 }
 
 async function logout() {
-  await userStore.clearUser();
+  console.log("logout")
+  // await userStore.clearUser();
+  await userStore.logout();
   // Redirect to home page or login page after logout
   window.location.href = '/';
 }
@@ -81,8 +83,7 @@ async function logout() {
                        :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign
-                      out</a>
+                    <a href="#" @click="logout()" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Déconnexion</a>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -136,8 +137,8 @@ async function logout() {
             Settings
           </DisclosureButton>
             <DisclosureButton as="a" href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-            Sign out
+                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white" @click="logout()">
+            Déconnexion
           </DisclosureButton>
           </div>
         </div>

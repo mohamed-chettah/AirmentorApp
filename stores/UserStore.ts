@@ -77,6 +77,13 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
+  async function logout() {
+    await $fetch('http://localhost:3001/auth/logout', {
+      method: 'GET',
+      credentials: 'include',
+    })
+  }
+
   async function myProfile(userId: number) {
     try {
       loading.value = true;
@@ -106,6 +113,7 @@ export const useUserStore = defineStore("user", () => {
     isAuthenticated,
     checkAuth,
     updateUser,
+    logout,
     clearUser,
   };
 });
