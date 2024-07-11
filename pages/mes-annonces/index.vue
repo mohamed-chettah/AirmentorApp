@@ -74,9 +74,19 @@ const deleteAnnouncement = async (id: string) => {
         <UIcon name="i-heroicons-chevron-right" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true"/>
       </div>
     </NuxtLink>
-      <UButton @click="deleteAnnouncement(annonce._id)" class=" w-fit bg-red-500 text-white rounded-full hover:bg-red-600 z-20">
-        <UIcon name="i-heroicons-trash" class="h-5 w-5 flex-none text-white" aria-hidden="true"/>
-      </UButton>
+      <div class="flex gap-4">
+        <UButton @click="deleteAnnouncement(annonce._id)" class=" w-fit bg-red-500 text-white rounded-full hover:bg-red-600 z-20">
+          <UIcon name="i-heroicons-trash" class="h-5 w-5 flex-none text-white" aria-hidden="true"/>
+        </UButton>
+
+        <!--      page avec les messages-->
+
+      <NuxtLink :to="'/mes-annonces/messages/' + annonce._id" >
+        <UButton class=" w-fit bg-blue-600 text-white rounded-full hover:bg-blue-500 z-20">
+          <UIcon name="i-heroicons-chat-bubble-bottom-center-text" class="h-5 w-5 flex-none text-white" aria-hidden="true"/>
+        </UButton>
+      </NuxtLink>
+      </div>
     </div>
   </main>
 </template>

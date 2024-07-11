@@ -216,7 +216,7 @@
         </div>
       </UCard>
     </div>
-    <Chat v-if="showChat" :id-announcement="announcementId" />
+    <Chat v-if="showChat" :id-announcement="announcementId" :announcement="announcement" />
   </div>
 
 

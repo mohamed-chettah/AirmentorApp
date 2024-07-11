@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {useUserStore} from "~/stores/UserStore";
+import { onMounted, ref } from 'vue';
+import { useUserStore } from '~/stores/UserStore';
+import { type AnnouncementType } from '~/types/AnnouncementType';
 
 const userStore = useUserStore();
 const ws = ref<WebSocket | null>(null);
@@ -13,12 +14,16 @@ const props = defineProps({
   idAnnouncement: {
     type: String,
     required: true
+  },
+  announcement: {
+    type: Object as () => AnnouncementType,
+    required: true
   }
 });
 
 const getHistoryMessages = async () => {
   try {
-    const response = await fetch(`http://localhost:3001/api/messages/getByIdUserAndIdAnnouncement/${userStore.user._id}/${props.idAnnouncement}`, {
+    const response = await fetch(`http://localhost:3001/api/conversations/${userStore.user._id}/${props.announcement?.createdBy._id}/${props.idAnnouncement}`, {
       method: "GET",
       credentials: "include", // This is important to include cookies
     });
@@ -33,37 +38,26 @@ getHistoryMessages();
 interface Message {
   _id: string;
   user: string;
-  sender: string;
   announcement: string;
+  creator: string;
   content: string;
   timestamp?: string; // Change timestamp to string type
 }
 
-const sendMessage = () => {
+const sendMessage = async () => {
   if (newMessage.value.trim() !== '') {
     const message: Message = {
       _id: '',
       user: userStore.user._id,
       announcement: props.idAnnouncement,
-      sender: userStore.user.name,
+      creator: props.announcement.createdBy._id,
       content: newMessage.value,
       timestamp: new Date().toISOString() // Convert timestamp to ISO string
     };
+
     if (ws.value && ws.value.readyState === WebSocket.OPEN) {
       ws.value.send(JSON.stringify(message));
       newMessage.value = '';
-    }
-
-    const messageProf: Message = {
-      _id: '',
-      user: userStore.user._id,
-      sender: 'professor',
-      announcement: props.idAnnouncement,
-      content: 'I am the professor, how can I help you?',
-      timestamp: new Date().toISOString()
-    };
-    if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-      ws.value.send(JSON.stringify(messageProf));
     }
   }
 };
@@ -77,7 +71,8 @@ onMounted(() => {
         try {
           const blobText = reader.result as string;
           const message = JSON.parse(blobText);
-          messages.value = [...messages.value, message];
+          console.log('Received Blob message:', message)
+          messages.value.push(message)
           // Scroll to the bottom of the chat
           scrollToBottom();
         } catch (error) {
@@ -85,6 +80,17 @@ onMounted(() => {
         }
       };
       reader.readAsText(event.data);
+    } else if (typeof event.data === 'string') {
+      try {
+        const message = JSON.parse(event.data);
+        console.log('Received Blob message:', message)
+
+        messages.value.push(message)
+        // Scroll to the bottom of the chat
+        scrollToBottom();
+      } catch (error) {
+        console.error('Error parsing message content:', error);
+      }
     } else {
       console.warn('Received unexpected message type:', typeof event.data);
     }
@@ -116,9 +122,9 @@ const scrollToBottom = () => {
       </button>
     </div>
     <div class="messages overflow-y-auto h-64 mb-4">
-      <div v-for="message in messages" :key="message._id" class="mb-2">
-        <div :class="{'bg-blue-100': message.sender === userStore.user.name, 'bg-green-100': message.sender !== userStore.user.name}" class="p-2 rounded-lg">
-          <strong>{{ message.sender }}:</strong> {{ message.content }}
+      <div v-for="message in messages " :key="message._id" class="mb-2">
+        <div :class="{'bg-blue-100': message.user.name === userStore.user.name, 'bg-green-100': message.user.name !== userStore.user.name}" class="p-2 rounded-lg">
+          <strong>{{ message.user.name }}:</strong> {{ message.content }}
         </div>
       </div>
     </div>
