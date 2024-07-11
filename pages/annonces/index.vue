@@ -41,7 +41,6 @@ if(route.query.categorie) {
       selectedCategorie.value = route.query.categorie
     }
   })
-  console.log(selectedCategorie.value)
 } else {
   useAnnouncementStore().getAllAnnouncement()
 }
@@ -63,7 +62,6 @@ function getAnnouncementByCateg(categorie: string) {
     <UIcon name="i-heroicons-squares-2x2-20-solid" class="text-[25px] text-primary" />
     <h1 class="text-3xl text-primary "> Listes des Annonces : </h1>
   </div>
-
 
   <div class=" flex flex-col gap-6 container mx-auto">
     <div class="flex gap-4">

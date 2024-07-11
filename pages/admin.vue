@@ -2,6 +2,7 @@
 import ListeCategorie from "~/components/categorie/liste-categorie.vue";
 import ListeSkill from "~/components/skill/liste-skill.vue";
 import ListeUtilisateur from "~/components/utilisateur/liste-utilisateur.vue";
+import {useCategorieStore} from "~/stores/CategorieStore";
 
 const items = [{
   key: 'categorie',
@@ -9,7 +10,7 @@ const items = [{
   icon: 'i-heroicons-tag-16-solid',
 }, {
   key: 'skill',
-  label: 'Skills',
+  label: 'Compétences',
   icon: 'i-mdi-lightning-bolt',
 }, {
   key: 'utilisateur',

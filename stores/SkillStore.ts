@@ -9,7 +9,7 @@ export const useSkillStore = defineStore("skill", () => {
     const listSkills = ref<SkillType[]>([]);
     const skill = ref<SkillType>({
         title: "",
-        categorie: "",
+        categories: "",
         _id: "",
     });
 
@@ -28,8 +28,41 @@ export const useSkillStore = defineStore("skill", () => {
         }
     }
 
+
+    async function updateSkill(skill: SkillType) {
+        try {
+            loading.value = true;
+            await $fetch("http://localhost:3001/api/skills/" + skill._id, {
+                method: "PUT",
+                credentials: "include", // This is important to include cookies
+                body: JSON.stringify(skill),
+            });
+        } catch (e) {
+            console.log(e);
+        }
+        finally {
+            loading.value = false;
+        }
+    }
+
+    async function deleteSkill(id: string) {
+        try {
+            loading.value = true;
+            await $fetch("http://localhost:3001/api/skills/" + id, {
+                method: "DELETE",
+                credentials: "include", // This is important to include cookies
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            loading.value = false;
+        }
+    }
+
     return {
         getAllSkill,
+        deleteSkill,
+        updateSkill,
         listSkills,
         loading,
     };
