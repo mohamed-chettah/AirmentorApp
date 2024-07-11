@@ -45,4 +45,6 @@ watch(isAuthenticated, (newValue) => {
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+
+  <UNotifications />
 </template>

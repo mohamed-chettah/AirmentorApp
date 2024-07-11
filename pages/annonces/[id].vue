@@ -82,10 +82,10 @@
     }
   });
 
-  //
-  // import Daily from '@daily-co/daily-js';
-  // let call = Daily.wrap(MY_IFRAME);
-  // call.join({ url: 'https://yourteam.daily.co/hello' });
+  const displayCamera = ref(false);
+
+
+
 </script>
 
 <template>
@@ -184,12 +184,18 @@
               <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl " />
               M'inscrire
             </UButton>
+
             <UButton disabled class="rounded-3xl p-4  text-2xl  w-fit" v-else>
               <UIcon name="i-heroicons-check-solid" class="text-2xl" />
               Inscrit
             </UButton>
-          </div>
 
+
+          </div>
+          <UButton v-if="isRegistered" @click="displayCamera = !displayCamera" >
+            <UIcon name="i-heroicons-video-camera" class="text-2xl " />
+            Facetime
+          </UButton>
           <!-- liste des inscrits -->
           <div class="flex flex-row gap-4" v-if="announcement.createdBy._id === userStore.user._id">
             <UMenu>
@@ -212,6 +218,14 @@
     </div>
     <Chat v-if="showChat" :id-announcement="announcementId" />
   </div>
+
+
+
+    <div v-if="displayCamera">
+        <Facecam />
+    </div>
+
+
 
 </template>
 

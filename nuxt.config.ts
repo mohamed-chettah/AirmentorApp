@@ -22,4 +22,14 @@ export default defineNuxtConfig({
     fallback: "light",
   },
   compatibilityDate: "2024-07-08",
+  app: {
+    head: {
+      script: [
+        {
+          src: "https://unpkg.com/@daily-co/daily-js",
+          crossorigin: "anonymous",
+        },
+      ],
+    },
+  }
 });

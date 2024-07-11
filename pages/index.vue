@@ -7,9 +7,6 @@ import HeroSection from "~/components/hero-section.vue";
   <HeroSection/>
 
   <Categorie />
-
-
-
 </template>
 
 <style scoped>
