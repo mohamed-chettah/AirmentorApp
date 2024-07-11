@@ -103,7 +103,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    successMessage.value = 'Profile updated successfully!';
+    successMessage.value = 'Profil mise à jour avec succès';
 
     // Optionally, clear the message after a few seconds
     setTimeout(() => {
@@ -152,25 +152,25 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UCard class="flex flex-col ">
           <h3 class="font-bold w-full text-center pb-3 ">Informations générales 📝</h3>
             <UForm :schema="schema" :state="state" class="space-y-4 " @submit="onSubmit">
-    <UFormGroup label="Name" name="name">
+    <UFormGroup label="Nom" name="name">
       <UInput v-model="state.name" />
     </UFormGroup>
     <UFormGroup label="Description" name="description">
       <UTextarea v-model="state.description" />
     </UFormGroup>
-    <UFormGroup label="Phone Number" name="Phone Number">
+    <UFormGroup label="Numéro de téléphone" name="Phone Number">
       <UInput v-model="state.phoneNumber" />
     </UFormGroup>
-    <UFormGroup label="Place" name="place">
+    <UFormGroup label="Lieu" name="place">
       <UInput v-model="state.place" size="xl" />
     </UFormGroup>
-    <UFormGroup label="Languages" name="languages">
+    <UFormGroup label="Langues" name="languages">
         <UInput
           v-model="languagesInput"
-          placeholder="e.g. French, German, English"
+          placeholder="ex : Français, Anglais..."
         />
         <p class="text-sm text-gray-500 mt-1">
-          Separate languages with commas
+          Séparer les langues avec des ;
         </p>
       </UFormGroup>
             <UButton @click="onSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500 ">Modifier</UButton>
