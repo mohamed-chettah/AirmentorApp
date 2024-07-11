@@ -1,22 +1,22 @@
 <template>
   <div class="max-w-4xl mx-auto p-4">
     <UCard class="flex flex-col">
-      <h3 class="font-bold w-full text-center pb-3">{{ announcementId ? 'Edit' : 'Create' }} Announcement 📝</h3>
-      <UForm :schema="schema" :state="form" class="space-y-4" @submit="handleSubmit">
-        <UFormGroup label="Title" name="title">
+      <h3 class="font-bold w-full text-center pb-3">Création d'une annonce 📝</h3>
+      <UForm :schema="schema" :state="form" class="space-y-4" >
+        <UFormGroup label="Titre" name="title">
           <UInput v-model="form.title"/>
         </UFormGroup>
         <UFormGroup label="Description" name="description">
           <UInput v-model="form.description"/>
         </UFormGroup>
-        <UFormGroup label="Is Active" name="is_activate">
+        <UFormGroup label="Annonce active" name="is_activate">
           <UCheckbox v-model="form.is_activate"/>
         </UFormGroup>
         <UFormGroup label="Skills" name="skills">
           <MultiSelect v-model:selectedItems="form.skills" :options="skillsOptions"/>
         </UFormGroup>
         <UButton @click="handleSubmit" type="submit" class="w-fit px-4 rounded-full bg-gray-500 hover:bg-blue-500">
-          {{ announcementId ? 'Update' : 'Create' }}
+        Create
         </UButton>
       </UForm>
     </UCard>
@@ -35,25 +35,17 @@ const form = ref<Partial<AnnouncementType>>({
   title: '',
   description: '',
   is_activate: true,
-  picture: userStore.user.profile_picture,
   skills: [],
-  createdBy: userStore.user
 });
 
 const schema = AnnouncementSchema; // Associe le schéma Zod à une variable pour UForm
 const router = useRouter();
-const route = useRoute();
-const announcementId = route.params.id as string;
 
 const skillsOptions =  await fetch('http://localhost:3001/api/skills').then(res => res.json());
 
-const fetchAnnouncement = async (id: string) => {
-  const res = await fetch(`http://localhost:3001/api/announcements/${id}`);
-  const data: AnnouncementType = await res.json();
-  form.value = data;
-};
-
 const handleSubmit = async () => {
+  form.value.createdBy = userStore.user;
+  form.value.picture = userStore.user.profile_picture;
   const result = schema.safeParse(form.value);
   console.log(JSON.stringify(result, null, 2));
   if (!result.success) {
@@ -61,10 +53,8 @@ const handleSubmit = async () => {
     return;
   }
 
-  const url = announcementId
-      ? `http://localhost:3001/api/announcements/${announcementId}`
-      : 'http://localhost:3001/api/announcements';
-  const method = announcementId ? 'PUT' : 'POST';
+  const url = 'http://localhost:3001/api/announcements';
+  const method = 'POST';
 
   await fetch(url, {
     method,
@@ -79,9 +69,6 @@ const handleSubmit = async () => {
 
 };
 
-if (announcementId) {
-  fetchAnnouncement(announcementId);
-}
 </script>
 
 <style scoped>

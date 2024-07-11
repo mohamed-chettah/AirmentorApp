@@ -47,10 +47,10 @@ const deleteAnnouncement = async (id: string) => {
     <li class=" relative flex flex-row justify-center items-center   py-5 bg-gray-100 hover:bg-gray-50">
       <UIcon name="i-heroicons-plus-circle" class="h-12 w-12 flex-none text-gray-400" aria-hidden="true"/>
       <p class="text-sm font-semibold leading-6 text-gray-900">
-        <a href="/mes-annonces/creer-modif">
+        <NuxtLink :to="'/mes-annonces/creer-modif'">
           <span class="absolute inset-x-0 -top-px bottom-0"/>
           Créer une annonce
-        </a>
+        </NuxtLink>
       </p>
     </li>
     <div v-for="annonce in listAnnouncements" :key="annonce._id" class="flex flex-row justify-between items-center gap-6">

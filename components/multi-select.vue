@@ -9,6 +9,7 @@
               &times;
             </button>
           </div>
+<!--          empecher d'ecrire-->
           <input
               type="text"
               class="flex-grow p-2 outline-none"
