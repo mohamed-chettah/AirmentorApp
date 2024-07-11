@@ -60,12 +60,14 @@
       <div class="mb-6">
         <UBadge color="blue" variant="outline" i class="rounded-2xl text-lg px-2">
           <UIcon name="i-heroicons-map-pin" class="text-2xl " />
-          {{ announcement.createdBy.place }}
+          {{ announcement.createdBy.place == "" || announcement.createdBy.place == null ? "A définir" :
+            announcement.createdBy.place }}
         </UBadge>
       </div>
       <h3 class="text-xl text-gray-600 font-bold mb-1">Skills</h3>
       <div class="mb-6 flex flex-wrap gap-2">
-        <UBadge color="blue" variant="outline" i class="rounded-2xl text-lg px-2" v-for="skill in announcement.skills" :key="skill._id">
+        <UBadge color="blue" variant="outline" i class="rounded-2xl text-lg px-2" v-for="skill in announcement.skills"
+          :key="skill._id">
           <UIcon name="i-heroicons-map-pin" class="text-2xl " />
           {{ skill.title }}
         </UBadge>
@@ -129,8 +131,10 @@
                 class="text-lg"
                 :class="index <= announcement.createdBy.reviews.reduce((acc, review) => acc + review.grade, 0) / announcement.createdBy.reviews.length ? 'text-yellow-400' : 'text-gray-300'" />
             </div>
-            <p class="text-sm text-gray-600">{{ (announcement.createdBy.reviews.reduce((acc, review) => acc +
-              review.grade, 0) / announcement.createdBy.reviews.length).toFixed(1) }}/5</p>
+            <p class="text-sm text-gray-600" v-if="announcement.createdBy.reviews.length > 0">{{
+              (announcement.createdBy.reviews.reduce((acc, review) => acc +
+                review.grade, 0) / announcement.createdBy.reviews.length).toFixed(1) }}/5</p>
+            <p class="text-sm text-gray-600" v-else>Il y a 0 avis</p>
           </div>
           <p class="text-sm text-gray-600">Tarif horaire: {{ announcement.createdBy.credits }} crédits</p>
           <UButton @click="showChat = !showChat" class="rounded-3xl p-4  text-2xl  w-fit">
