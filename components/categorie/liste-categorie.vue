@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { useCategorieStore } from "~/stores/CategorieStore";
 import type { CategorieType } from "~/types/CategorieType";
-import type {SkillType} from "~/types/SkillType";
 
 const categorieStore = useCategorieStore();
 categorieStore.getAllCategorie();

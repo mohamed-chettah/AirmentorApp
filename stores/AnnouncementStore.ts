@@ -49,9 +49,25 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         }
     }
 
+    async function searchAnnouncementBySkill(idSkill : string){
+        try {
+            loading.value = true;
+            listAnnouncements.value = await $fetch("http://localhost:3001/api/announcements/skills/" + idSkill , {
+                method: "GET",
+                credentials: "include", // This is important to include cookies
+            });
+
+        } catch (e) {
+            console.log(e);
+        } finally {
+            loading.value = false;
+        }
+    }
+
     return {
         getAllAnnouncement,
         getAllAnnouncementByCateg,
+        searchAnnouncementBySkill,
         listAnnouncements,
         loading,
     };

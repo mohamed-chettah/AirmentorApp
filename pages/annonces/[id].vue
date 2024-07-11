@@ -48,11 +48,18 @@
       isLoading.value = false
     }
   });
+
+  //
+  // import Daily from '@daily-co/daily-js';
+  // let call = Daily.wrap(MY_IFRAME);
+  // call.join({ url: 'https://yourteam.daily.co/hello' });
 </script>
 
 
 
 <template>
+
+  <iframe id="call-frame"></iframe>
   <div class="flex flex-col justify-between md:flex-row gap-6 container mx-auto" v-if="!isLoading">
     <div class="w-2/3">
       <h1 class="text-4xl font-bold text-primary w-full mb-3">{{ announcement.title }}</h1>

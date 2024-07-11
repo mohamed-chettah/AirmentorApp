@@ -1,20 +1,51 @@
 <script setup lang="ts">
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 import { useUserStore } from '~/stores/UserStore';
 
 const userStore = useUserStore();
 const { user, isAuthenticated } = storeToRefs(userStore);
+
+const skillStore = useSkillStore()
+
+const options = ref({});
+onMounted( async () => {
+  await skillStore.getAllSkill()
+  // foreach listSkills in skillStore.skills and keep in options the value and the name of the skill
+  options.value = skillStore.listSkills.map(skill => ({ id: skill._id, name: skill.title }))
+})
+
+const selected = ref('');
 
 async function authenticate() {
   window.location.href = 'http://localhost:3001/auth/google';
 }
 
 async function logout() {
-  console.log('logout')
+  console.log('logout');
   window.location.href = 'http://localhost:3001/auth/logout';
 }
+
+async function searchAnnouncements() {
+  if (!selected.value.id) {
+    alert('Veuillez sélectionner un terme de recherche');
+    return;
+  }
+
+  const router = useRouter();
+
+console.log(selected)
+  router.push({
+    path: '/annonces',
+    query: {
+      skills: selected.value.id,
+    },
+  });
+}
+
 </script>
+
 
 <template>
   <Disclosure as="nav" class="bg-white z-50" v-slot="{ open }">
@@ -38,16 +69,19 @@ async function logout() {
           </div>
         </div>
         <div class="flex flex-1 justify-center px-2 gap-3 lg:ml-6 lg:justify-end">
-
-          <UInput
-              size="md"
-              color="white"
-              :trailing="false"
-              placeholder="Que souhaitez vous apprendre ?"
-              class="rounded-xl xl:w-60 w-40"
-          />
-
-          <UButton class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>
+          <UInputMenu
+              v-model="selected"
+              :options="options"
+              placeholder="Que souhaiter vous apprendre ?"
+              by="id"
+              option-attribute="name"
+              :search-attributes="['name']"
+              class="rounded-xl xl:w-72 w-40"
+          >
+            <template #option="{ option: person }"><span class="truncate">{{ person.name }}</span>
+            </template>
+          </UInputMenu>
+          <UButton @click="searchAnnouncements" class="rounded-xl p-2" icon="i-heroicons-magnifying-glass-20-solid"/>
         </div>
         <div class="flex lg:hidden">
           <DisclosureButton

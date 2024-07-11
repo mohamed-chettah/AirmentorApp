@@ -1,55 +1,65 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useCategorieStore } from "~/stores/CategorieStore";
+import { useSkillStore } from "~/stores/SkillStore";
+import { useAnnouncementStore } from "~/stores/AnnouncementStore";
 import type { AnnouncementType } from "~/types/AnnouncementType";
-import {useCategorieStore} from "~/stores/CategorieStore";
-import {useSkillStore} from "~/stores/SkillStore";
-import {useAnnouncementStore} from "~/stores/AnnouncementStore";
 
+// Options pour les notes
 const notes = [
-  {label: 'Toutes', value: 'all'},
-  {label: '1 étoile', value: '1'},
-  {label: '2 étoiles', value: '2'},
-  {label: '3 étoiles', value: '3'},
-  {label: '4 étoiles', value: '4'},
-  {label: '5 étoiles', value: '5'}
-]
+  { label: 'Toutes', value: 'all' },
+  { label: '1 étoile', value: '1' },
+  { label: '2 étoiles', value: '2' },
+  { label: '3 étoiles', value: '3' },
+  { label: '4 étoiles', value: '4' },
+  { label: '5 étoiles', value: '5' }
+];
 
-useCategorieStore().getAllCategorie()
+// Références réactives pour les catégories et les compétences
+const categories = ref([]);
+const selectedCategorie = ref('all');
+const skills = ref([]);
 
+// Récupération des stores
+const categorieStore = useCategorieStore();
+const skillStore = useSkillStore();
+const announcementStore = useAnnouncementStore();
 
+// Route actuelle
+const route = useRoute();
 
-const categories = useCategorieStore().listCategories.map((categorie) => {
-  return {label: categorie.title, value: categorie._id}
-})
-
-
-categories.unshift({label: 'Toutes', value: 'all'})
-
-const selectedCategorie = ref('all')
-
-useSkillStore().getAllSkill()
-
-const skills = useSkillStore().listSkills.map((skill) => {
-  return {label: skill.title, value: skill._id}
-})
-
-const route = useRoute()
-
-if(route.query.categorie) {
-  useAnnouncementStore().getAllAnnouncementByCateg(route.query.categorie as string)
-  categories.forEach((categorie) => {
-    if(categorie.value === route.query.categorie) {
-      selectedCategorie.value = route.query.categorie
-    }
-  })
-} else {
-  useAnnouncementStore().getAllAnnouncement()
+// Fonction pour récupérer les annonces par catégorie
+function getAnnouncementByCateg(categorie) {
+  if (categorie === 'all') {
+    announcementStore.getAllAnnouncement();
+  } else {
+    announcementStore.getAllAnnouncementByCateg(categorie);
+  }
 }
 
-function getAnnouncementByCateg(categorie: string) {
-  if(categorie === 'all') return useAnnouncementStore().getAllAnnouncement()
-  useAnnouncementStore().getAllAnnouncementByCateg(categorie)
-}
+// Monté du composant
+onMounted(async () => {
+  await categorieStore.getAllCategorie();
+  categories.value = categorieStore.listCategories.map((categorie) => {
+    return { label: categorie.title, value: categorie._id };
+  });
+  categories.value.unshift({ label: 'Toutes', value: 'all' });
 
+  await skillStore.getAllSkill();
+  skills.value = skillStore.listSkills.map((skill) => {
+    return { label: skill.title, value: skill._id };
+  });
+
+  if (route.query.categorie) {
+    getAnnouncementByCateg(route.query.categorie as string);
+    selectedCategorie.value = route.query.categorie;
+  } else if (route.query.skills) {
+    announcementStore.searchAnnouncementBySkill(route.query.skills as string);
+  } else {
+    announcementStore.getAllAnnouncement();
+  }
+});
 </script>
 
 <template>
