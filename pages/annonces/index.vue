@@ -85,8 +85,8 @@ onMounted(async () => {
         <UCard>
           <div class="flex flex-col gap-4 p-4">
             <NuxtImg :src="annonce.picture " class="w-full h-48 object-cover rounded-md"/>
-            <h3 class="font-bold text-xl text-gray-800">{{ annonce.title }}</h3>
-            <p class="text-sm text-gray-600">{{ annonce.description }}</p>
+            <h3 class="font-bold text-xl text-gray-800 line-clamp-1">{{ annonce.title }}</h3>
+            <p class="text-sm text-gray-600 line-clamp-3">{{ annonce.description }}</p>
             <h3 class="text-xl text-gray-600 font-bold mb-1">Skills</h3>
             <div class="mb-6 flex flex-wrap gap-2">
               <UBadge color="blue" variant="outline" i class="rounded-2xl text-lg px-2" v-for="skill in annonce.skills" :key="skill._id">
