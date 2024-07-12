@@ -10,14 +10,7 @@
   const route = useRoute();
   const showChat = ref(false);
 
-  const isRegistered = computed({
-    get() {
-      return announcement.value.registeredUsers.reduce((acc, us) => acc || us._id === userStore.user._id, false);
-    },
-    set(value) {
-      isRegistered.value = value;
-    }
-  })
+  const isRegistered = ref(false);
 
   const isLoading = ref(true)
 
@@ -38,6 +31,7 @@
       if (response.ok) {
         console.log('User enrolled');
         isRegistered.value = true;
+        await fetchAnnouncement();
       } else {
         console.error('Error enrolling user');
       }
@@ -65,6 +59,7 @@
         const response = await fetchWithoutBody(`announcements/${announcementId.value}`, 'GET');
         console.log(response);
         announcement.value = await response.announcement as AnnouncementType;
+        isRegistered.value = announcement.value.registeredUsers.reduce((acc, us) => acc || us._id === userStore.user._id, false);
         console.log(announcement.value);
 
       } catch (error) {
@@ -95,6 +90,7 @@
     <div class="w-2/3">
       <h1 class="text-4xl font-bold text-primary w-full mb-3">{{ announcement.title }}</h1>
       <h3 class="text-xl text-gray-600 font-bold mb-1">Lieux du cours</h3>
+
       <div class="mb-6">
         <UBadge color="blue" variant="outline" i class="rounded-2xl text-lg px-2">
           <UIcon name="i-heroicons-map-pin" class="text-2xl " />
@@ -102,6 +98,7 @@
             announcement.createdBy.place }}
         </UBadge>
       </div>
+
       <h3 class="text-xl text-gray-600 font-bold mb-1">Skills</h3>
       <div class="mb-6 flex flex-wrap gap-2">
         <UBadge color="blue" variant="outline" i class="rounded-2xl text-lg px-2" v-for="skill in announcement.skills"
@@ -135,6 +132,7 @@
               :class="index <= announcement.createdBy.reviews.reduce((acc, review) => acc + review.grade, 0) / announcement.createdBy.reviews.length ? 'text-yellow-400' : 'text-gray-300'" />
           </div>
         </div>
+
         <UCard v-for="review, key in announcement.createdBy.reviews" :key="key" class="p-4">
           <div class="flex gap-4 justify-between pb-4">
             <img :src="review.reviewer.profile_picture">
@@ -176,28 +174,31 @@
           </div>
           <p class="text-sm text-gray-600">Tarif horaire: {{ announcement.createdBy.credits }} crédits</p>
           <div class="flex flex-row gap-4">
-            <UButton @click="showChat = !showChat" class="rounded-3xl p-4  text-2xl  w-fit">
+            <UButton @click="showChat = !showChat" class="rounded-3xl p-4  text-2xl  w-fit"
+              v-if="announcement.createdBy._id !== userStore.user._id">
               <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl " />
               Contacter
             </UButton>
-            <UButton @click="roll" class="rounded-3xl p-4  text-2xl  w-fit" v-if="!isRegistered">
+            <UButton @click="roll" class="rounded-3xl p-4  text-2xl  w-fit"
+              v-if="!isRegistered && announcement.createdBy._id !== userStore.user._id">
               <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl " />
               M'inscrire
             </UButton>
 
-            <UButton disabled class="rounded-3xl p-4  text-2xl  w-fit" v-else>
+            <UButton disabled class="rounded-3xl p-4  text-2xl  w-fit"
+              v-else-if="announcement.createdBy._id !== userStore.user._id">
               <UIcon name="i-heroicons-check-solid" class="text-2xl" />
               Inscrit
             </UButton>
 
-
           </div>
-          <UButton v-if="isRegistered" @click="displayCamera = !displayCamera" >
+          <UButton v-if="isRegistered && announcement.createdBy._id !== userStore.user._id"
+            @click="displayCamera = !displayCamera">
             <UIcon name="i-heroicons-video-camera" class="text-2xl " />
             Facetime
           </UButton>
           <!-- liste des inscrits -->
-          <div class="flex flex-row gap-4" v-if="announcement.createdBy._id === userStore.user._id">
+          <div class="flex flex-row gap-4">
             <UMenu>
               <template #trigger>
                 <UButton class="rounded-3xl p-4  text-2xl  w-fit">
@@ -207,7 +208,7 @@
               </template>
               <UMenuItem v-for="user in announcement.registeredUsers" :key="user._id">
                 <div class="flex gap-4 items-center">
-                  <img :src="user.profile_picture" class="w-12 h-12 rounded-full">
+                  <img :src="user.profile_picture" class="w-12 h-12 rounded-full mb-2">
                   <p class="text-gray-800">{{ user.name }}</p>
                 </div>
               </UMenuItem>
@@ -221,9 +222,9 @@
 
 
 
-    <div v-if="displayCamera">
-        <Facecam />
-    </div>
+  <div v-if="displayCamera">
+    <Facecam />
+  </div>
 
 
 
