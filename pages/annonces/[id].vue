@@ -10,6 +10,8 @@
   const route = useRoute();
   const showChat = ref(false);
 
+  const isLoadingReview = ref(false);
+
   const isRegistered = ref(false);
 
   const isLoading = ref(true)
@@ -17,6 +19,46 @@
   // Extract the announcement ID from the URL
   const announcementId = ref<string>("");
   const announcement = ref<AnnouncementType>({} as AnnouncementType);
+
+  const isOpen = ref(false);
+  const revrev = ref({
+    description: '',
+    grade: 5,
+    reviewer: "",
+    reviewed: "",
+  });
+
+  async function addReview() {
+    isLoadingReview.value = true;
+
+    try {
+      const rep = await fetch(`http://localhost:3001/api/users/reviews/${announcement.value.createdBy.googleId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          review: {
+            description: revrev.value.description,
+            grade: revrev.value.grade,
+            reviewer: userStore.user._id,
+            reviewed: announcement.value.createdBy._id,
+          }
+        }),
+      });
+
+      if (rep.ok) {
+        console.log('review sent');
+        await fetchAnnouncement();
+      }
+    } catch (error) {
+      console.log("review not sent", error);
+    } finally {
+
+      isLoadingReview.value = false;
+    }
+  }
 
   function contact() {
     if (userStore.user._id) {
@@ -80,8 +122,13 @@
         const response = await fetchWithoutBody(`announcements/${announcementId.value}`, 'GET');
         console.log(response);
         announcement.value = await response.announcement as AnnouncementType;
-        isRegistered.value = announcement.value.registeredUsers.reduce((acc, us) => acc || us._id === userStore.user._id, false);
         console.log(announcement.value);
+        console.log("ici gros", {
+          userId: userStore.user._id,
+          announcementUserIds: announcement.value.registeredUsers.map((user) => user._id)
+        });
+
+        isRegistered.value = announcement.value.registeredUsers.some((user) => user._id === userStore.user._id);
 
       } catch (error) {
         console.error('Error fetching announcement:', error);
@@ -173,6 +220,17 @@
       </div>
       <div v-else>
         <p class="text-gray-600">Aucun avis disponible</p>
+        <!-- boutton pur donner un avis -->
+        <p>
+          {{ isRegistered }}
+          {{ announcement.createdBy._id !== userStore.user._id && isRegistered }}
+          {{ isRegistered }}
+        </p>
+        <UButton @click="isOpen = !isOpen" class="rounded-3xl p-4  text-2xl  w-fit"
+          v-if="announcement.createdBy._id !== userStore.user._id && isRegistered">
+          <UIcon name="i-heroicons-star-solid" class="text-2xl " />
+          Laisser un avis
+        </UButton>
       </div>
     </div>
 
@@ -202,7 +260,7 @@
             </UButton>
             <UButton @click="roll" class="rounded-3xl p-4  text-2xl  w-fit"
               v-if="!isRegistered && announcement.createdBy._id !== userStore.user._id">
-              <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl " />
+              <UIcon name="i-heroicons-user-plus-solid" class="text-2xl " />
               M'inscrire
             </UButton>
 
@@ -248,6 +306,43 @@
   </div>
 
 
+
+  <UModal v-model="isOpen">
+    <form @submit.prevent="addReview">
+      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white ">
+              {{ "Ajout d'un avis" }}
+            </h3>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+              @click="isOpen = false" />
+          </div>
+        </template>
+
+
+        <div class="flex flex-col justify-center gap-6 px-8 ">
+          <UFormGroup label="Note" name="note">
+            <UInput type="text" v-model="revrev.grade" required />
+          </UFormGroup>
+          <UFormGroup label="Description" name="description">
+            <UTextarea class="mt-2" placeholder="Description avis..." v-model="revrev.description" />
+          </UFormGroup>
+        </div>
+
+        <template #footer>
+          <div class="flex gap-3 py-4 justify-center">
+            <UButton @click="isOpen = false" class="bg-red-500">
+              Annuler
+            </UButton>
+            <UButton type="submit" :loading="isLoadingReview">
+              Enregistrer
+            </UButton>
+          </div>
+        </template>
+      </UCard>
+    </form>
+  </UModal>
 
 </template>
 
