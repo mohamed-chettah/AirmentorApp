@@ -84,7 +84,7 @@ onMounted(async () => {
       <NuxtLink :to="'/annonces/' + annonce._id" class="p-0" v-for="annonce in useAnnouncementStore().listAnnouncements" :key="annonce._id">
         <UCard>
           <div class="flex flex-col gap-4 p-4">
-            <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md"/>
+            <NuxtImg :src="annonce.picture " class="w-full h-48 object-cover rounded-md"/>
             <h3 class="font-bold text-xl text-gray-800">{{ annonce.title }}</h3>
             <p class="text-sm text-gray-600">{{ annonce.description }}</p>
             <h3 class="text-xl text-gray-600 font-bold mb-1">Skills</h3>

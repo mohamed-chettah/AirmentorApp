@@ -146,9 +146,9 @@
           </div>
         </div>
 
-        <UCard v-for="review, key in announcement.createdBy.reviews" :key="key" class="p-4">
+        <UCard v-for="(review, key) in announcement.createdBy.reviews" :key="key" class="p-4">
           <div class="flex gap-4 justify-between pb-4">
-            <img :src="review.reviewer.profile_picture">
+            <img :src="review.reviewer.profile_picture" alt="Profile Picture">
 
             <h3 class="font-bold text-xl text-gray-800">{{ review.reviewer.name }}</h3>
 

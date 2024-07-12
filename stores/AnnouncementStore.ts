@@ -8,15 +8,7 @@ import type {AnnouncementType} from "~/types/AnnouncementType";
 export const useAnnouncementStore = defineStore("announcement", () => {
     const loading = ref(false);
     const listAnnouncements = ref<AnnouncementType[]>([]);
-    const announcement = ref<AnnouncementType>({
-        title: "",
-        _id: "",
-        description: "",
-        picture: "",
-        skills: [],
-        is_activate: false,
-        review: [],
-    });
+    const announcement = ref<AnnouncementType[]>([]);
 
     async function getAllAnnouncement() {
         try {
@@ -25,6 +17,21 @@ export const useAnnouncementStore = defineStore("announcement", () => {
                 method: "GET",
                 credentials: "include", // This is important to include cookies
             });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            // setMessage('La réservation a été mise à jour avec succès');
+            loading.value = false;
+        }
+    }
+
+    async function getAnnouncementById(id : string) {
+        try {
+            loading.value = true;
+            announcement.value = await $fetch("http://localhost:3001/api/announcements/" + id, {
+                method: "GET",
+                credentials: "include", // This is important to include cookies
+            })
         } catch (e) {
             console.log(e);
         } finally {
@@ -84,7 +91,9 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         getAllAnnouncementByCateg,
         searchAnnouncementBySkill,
         searchAnnouncementByTitle,
+        getAnnouncementById,
         listAnnouncements,
+        announcement,
         loading,
     };
 })

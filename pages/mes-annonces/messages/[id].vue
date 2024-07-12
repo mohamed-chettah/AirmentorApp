@@ -2,10 +2,18 @@
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '~/stores/UserStore';
+import {useAnnouncementStore} from "~/stores/AnnouncementStore";
 
 const userStore = useUserStore();
 const route = useRoute();
 const announcementId = route.params.id;
+
+const announcementStore = useAnnouncementStore()
+
+onMounted(async () => {
+  await announcementStore.getAnnouncementById(announcementId)
+  console.log(announcementStore.announcement)
+});
 
 const conversations = ref<Conversation[]>([]);
 const selectedConversation = ref<Conversation | null>(null);
@@ -49,7 +57,12 @@ onMounted(() => {
 
 <template>
   <div class="container mx-auto py-4">
-    <h1 class="text-2xl font-semibold mb-4">chat de l'annonce: {{ announcementId }}</h1>
+
+    <div v-if="useAnnouncementStore().announcement.announcement">
+      <h1  class="text-2xl font-semibold mb-4">chat de l'annonce: {{ useAnnouncementStore().announcement.announcement.title }}</h1>
+      <NuxtImg :src="useAnnouncementStore().announcement.announcement.picture" />
+    </div>
+
     <div class="flex">
       <!-- Conversations List -->
       <div class="w-1/3 p-4 border-r">
