@@ -51,11 +51,11 @@
       if (rep.ok) {
         console.log('review sent');
         await fetchAnnouncement();
+        isOpen.value = false;
       }
     } catch (error) {
       console.log("review not sent", error);
     } finally {
-
       isLoadingReview.value = false;
     }
   }
@@ -221,11 +221,6 @@
       <div v-else>
         <p class="text-gray-600">Aucun avis disponible</p>
         <!-- boutton pur donner un avis -->
-        <p>
-          {{ isRegistered }}
-          {{ announcement.createdBy._id !== userStore.user._id && isRegistered }}
-          {{ isRegistered }}
-        </p>
         <UButton @click="isOpen = !isOpen" class="rounded-3xl p-4  text-2xl  w-fit"
           v-if="announcement.createdBy._id !== userStore.user._id && isRegistered">
           <UIcon name="i-heroicons-star-solid" class="text-2xl " />
@@ -287,7 +282,8 @@
               </template>
               <UMenuItem v-for="user in announcement.registeredUsers" :key="user._id">
                 <div class="flex gap-4 items-center">
-                  <img :src="user.profile_picture" class="w-12 h-12 rounded-full mb-2">
+                  <img :src="user.profile_picture" v-if="user.profile_picture" class="w-12 h-12 rounded-full mb-2" />
+                  <UIcon class="h-12 w-12 rounded-full" name="i-mdi-account-circle" v-else />
                   <p class="text-gray-800">{{ user.name }}</p>
                 </div>
               </UMenuItem>
