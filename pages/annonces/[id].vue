@@ -120,14 +120,7 @@
     if (announcementId.value) {
       try {
         const response = await fetchWithoutBody(`announcements/${announcementId.value}`, 'GET');
-        console.log(response);
         announcement.value = await response.announcement as AnnouncementType;
-        console.log(announcement.value);
-        console.log("ici gros", {
-          userId: userStore.user._id,
-          announcementUserIds: announcement.value.registeredUsers.map((user) => user._id)
-        });
-
         isRegistered.value = announcement.value.registeredUsers.some((user) => user._id === userStore.user._id);
 
       } catch (error) {

@@ -1,11 +1,8 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   if (!process.client) return;
   if (to.meta.requiresAuth) {
-    console.log("wsh");
-
     const token = useCookie("auth_token");
     let role = "";
-    console.log(token);
 
     // If the route requires authentication
     if (to.path.startsWith("/admin")) {

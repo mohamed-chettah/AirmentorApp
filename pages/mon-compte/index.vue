@@ -50,7 +50,6 @@
       const user = await response.json()
 
       if (user) {
-        console.log(user)
         // Update all properties of state with the fetched data
         state.name = user.name
         state.description = user.description
@@ -60,7 +59,6 @@
         state.credits = user.credits
         state.grade = user.grade
         state.place = user.place
-        console.log('User data updated successfully');
       }
     } catch (e) {
       console.log('Failed to fetch user data', e);
@@ -89,7 +87,6 @@
         place: state.place,
         languages: state.languages,
       });
-      console.log("parsedData", parsedData)
       const response = await fetch(`http://localhost:3001/api/users/${userStore.user.googleId}`, {
         method: 'PUT',
         credentials: "include",
@@ -109,7 +106,6 @@
         successMessage.value = '';
       }, 5000);
       const result = await response.json();
-      console.log('Success:', result);
 
       // Update the user store with the new data
       userStore.updateUser(result);
