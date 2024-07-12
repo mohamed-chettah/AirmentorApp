@@ -18,7 +18,20 @@
   const announcementId = ref<string>("");
   const announcement = ref<AnnouncementType>({} as AnnouncementType);
 
+  function contact() {
+    if (userStore.user._id) {
+      showChat.value = !showChat.value;
+    } else {
+      location.href = 'http://localhost:3001/auth/google';
+    }
+  }
+
   async function roll() {
+    if (!userStore.user._id) {
+      location.href = 'http://localhost:3001/auth/google';
+    }
+
+
     try {
       const response = await fetch(`http://localhost:3001/api/users/enroll/${announcementId.value}`, {
         method: 'PUT',
@@ -174,7 +187,7 @@
           </div>
           <p class="text-sm text-gray-600">Tarif horaire: {{ announcement.createdBy.credits }} crédits</p>
           <div class="flex flex-row gap-4">
-            <UButton @click="showChat = !showChat" class="rounded-3xl p-4  text-2xl  w-fit"
+            <UButton @click="contact" class="rounded-3xl p-4  text-2xl  w-fit"
               v-if="announcement.createdBy._id !== userStore.user._id">
               <UIcon name="i-heroicons-chat-bubble-left-right-solid" class="text-2xl " />
               Contacter
