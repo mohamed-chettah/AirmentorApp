@@ -2,25 +2,21 @@
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '~/stores/UserStore';
-import {useAnnouncementStore} from "~/stores/AnnouncementStore";
+import { useAnnouncementStore } from '~/stores/AnnouncementStore';
 
 const userStore = useUserStore();
 const route = useRoute();
 const announcementId = route.params.id;
 
-const announcementStore = useAnnouncementStore()
-
-onMounted(async () => {
-  await announcementStore.getAnnouncementById(announcementId)
-  console.log(announcementStore.announcement)
-});
-
+const announcementStore = useAnnouncementStore();
 const conversations = ref<Conversation[]>([]);
 const selectedConversation = ref<Conversation | null>(null);
+const newMessage = ref('');
+const ws = ref<WebSocket | null>(null);
 
 interface Conversation {
   _id: string;
-  idUser: string[];
+  idUser: { _id: string; name: string; profile_picture: string }[];
   idCreator: string[];
   idAnnouncement: string[];
   messages: Message[];
@@ -32,7 +28,21 @@ interface Message {
   content: string;
   timestamp: string;
 }
+interface MessageSend {
+  _id: string;
+  conversationId: string;
+  user: string;
+  announcement: string;
+  creator: string;
+  content: string;
+  timestamp?: string; // Change timestamp to string type
+}
 
+onMounted(async () => {
+  await announcementStore.getAnnouncementById(announcementId);
+  getConversations();
+  initializeWebSocket();
+});
 
 const getConversations = async () => {
   try {
@@ -50,21 +60,77 @@ const selectConversation = (conversation: Conversation) => {
   selectedConversation.value = conversation;
 };
 
-onMounted(() => {
-  getConversations();
-});
+const initializeWebSocket = () => {
+  ws.value = new WebSocket('ws://localhost:3001');
+
+  ws.value.onmessage = (event) => {
+    if (typeof event.data === 'string') {
+      try {
+        const message = JSON.parse(event.data);
+        console.log('Received message:', message)
+        if (selectedConversation.value && selectedConversation.value._id === message.conversationId) {
+          selectedConversation.value.messages.push(message);
+          scrollToBottom();
+        }
+        if (selectedConversation.value && selectedConversation.value.idUser._id === message.user._id) {
+          selectedConversation.value.messages.push(message);
+          scrollToBottom();
+        }
+      } catch (error) {
+        console.error('Error parsing message content:', error);
+      }
+    } else {
+      console.warn('Received unexpected message type:', typeof event.data);
+    }
+  };
+
+  ws.value.onopen = () => {
+    console.log('Connected to WebSocket server');
+  };
+
+  ws.value.onclose = () => {
+    console.log('Disconnected from WebSocket server');
+  };
+};
+
+const sendMessage = async () => {
+  if (newMessage.value.trim() !== '' && selectedConversation.value) {
+
+    const message: MessageSend = {
+      _id: '',
+      conversationId: selectedConversation.value._id,
+      user: userStore.user._id,
+      announcement: announcementId as string,
+      creator: userStore.user._id,
+      content: newMessage.value,
+      timestamp: new Date().toISOString() // Convert timestamp to ISO string
+    };
+    if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+      ws.value.send(JSON.stringify(
+        message
+      ));
+
+      newMessage.value = '';
+    }
+  }
+};
+
+const scrollToBottom = () => {
+  const chat = document.querySelector('.messages');
+  if (chat) {
+    chat.scrollTop = chat.scrollHeight;
+  }
+};
 </script>
 
 <template>
   <div class="container mx-auto py-4">
-
     <div v-if="useAnnouncementStore().announcement.announcement">
-      <h1  class="text-2xl font-semibold mb-4">chat de l'annonce: {{ useAnnouncementStore().announcement.announcement.title }}</h1>
+      <h1 class="text-2xl font-semibold mb-4">Chat de l'annonce: {{ useAnnouncementStore().announcement.announcement.title }}</h1>
       <NuxtImg :src="useAnnouncementStore().announcement.announcement.picture" />
     </div>
 
     <div class="flex">
-      <!-- Conversations List -->
       <div class="w-1/3 p-4 border-r">
         <h2 class="text-xl font-semibold mb-2">Conversations</h2>
         <ul>
@@ -76,13 +142,10 @@ onMounted(() => {
           >
             <NuxtImg :src="conversation.idUser[0].profile_picture" class="w-12 h-12 object-cover rounded-full"/>
             {{ conversation.idUser[0].name }}
-
-
           </li>
         </ul>
       </div>
 
-      <!-- Selected Conversation -->
       <div class="w-2/3 p-4">
         <div v-if="selectedConversation">
           <h2 class="text-xl font-semibold mb-2">Messages</h2>
@@ -93,6 +156,11 @@ onMounted(() => {
               </div>
             </div>
           </div>
+          <form @submit.prevent="sendMessage" class="flex">
+            <input v-model="newMessage" placeholder="Type your message..."
+                   class="flex-1 p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            <button type="submit" class="p-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600">Send</button>
+          </form>
         </div>
         <div v-else>
           <p>Select a conversation to view messages.</p>
