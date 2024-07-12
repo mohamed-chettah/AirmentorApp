@@ -31,7 +31,6 @@
       location.href = 'http://localhost:3001/auth/google';
     }
 
-
     try {
       const response = await fetch(`http://localhost:3001/api/users/enroll/${announcementId.value}`, {
         method: 'PUT',
@@ -44,6 +43,15 @@
       if (response.ok) {
         console.log('User enrolled');
         isRegistered.value = true;
+        const toast = useToast()
+
+        toast.add({
+          id: 'delete_files',
+          title: 'Inscription',
+          description: 'Vous êtes inscrit au cours',
+          icon: 'i-octicon-desktop-download-24',
+          timeout: 3000
+        })
         await fetchAnnouncement();
       } else {
         console.error('Error enrolling user');
