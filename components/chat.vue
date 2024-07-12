@@ -27,7 +27,10 @@ const getHistoryMessages = async () => {
       method: "GET",
       credentials: "include", // This is important to include cookies
     });
-    messages.value = await response.json();
+    if (response.ok) {
+      messages.value = await response.json();
+    }
+
   } catch (error) {
     console.error('Error fetching messages:', error);
   }
@@ -122,7 +125,7 @@ const scrollToBottom = () => {
       </button>
     </div>
     <div class="messages overflow-y-auto h-64 mb-4">
-      <div v-for="message in messages " :key="message._id" class="mb-2">
+      <div v-for="message in messages " :key="message._id" class="mb-2" v-if="messages.length > 0">
         <div :class="{'bg-blue-100': message.user.name === userStore.user.name, 'bg-green-100': message.user.name !== userStore.user.name}" class="p-2 rounded-lg">
           <strong>{{ message.user.name }}:</strong> {{ message.content }}
         </div>
