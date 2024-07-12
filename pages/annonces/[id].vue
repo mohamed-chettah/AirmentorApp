@@ -31,7 +31,6 @@
       location.href = 'http://localhost:3001/auth/google';
     }
 
-
     try {
       const response = await fetch(`http://localhost:3001/api/users/enroll/${announcementId.value}`, {
         method: 'PUT',
@@ -44,6 +43,15 @@
       if (response.ok) {
         console.log('User enrolled');
         isRegistered.value = true;
+        const toast = useToast()
+
+        toast.add({
+          id: 'delete_files',
+          title: 'Inscription',
+          description: 'Vous êtes inscrit au cours',
+          icon: 'i-octicon-desktop-download-24',
+          timeout: 3000
+        })
         await fetchAnnouncement();
       } else {
         console.error('Error enrolling user');
@@ -171,7 +179,7 @@
     <div class="w-1/3">
       <UCard>
         <div class="flex flex-col gap-4 p-4">
-          <NuxtImg src="/img/main-picture.png" class="w-full h-48 object-cover rounded-md" />
+          <NuxtImg :src="announcement.picture" class="w-full h-48 object-cover rounded-md" />
           <h3 class="font-bold text-xl text-gray-800">{{ announcement.createdBy.name }}</h3>
           <div class="flex gap-4 items-center">
             <div class="flex gap-1">
@@ -205,7 +213,7 @@
             </UButton>
 
           </div>
-          <UButton v-if="isRegistered && announcement.createdBy._id !== userStore.user._id"
+          <UButton v-if="isRegistered || announcement.createdBy._id == userStore.user._id"
             @click="displayCamera = !displayCamera">
             <UIcon name="i-heroicons-video-camera" class="text-2xl " />
             Facetime
